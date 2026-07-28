@@ -1,26 +1,16 @@
 # Well Seasoned
 
 Well Seasoned is a Minecraft food overhaul inspired by ingredient-driven
-adventure-game cooking. It currently targets Minecraft 1.21.1 on NeoForge.
+adventure-game cooking.
 
 ## Gameplay
 
 - The hunger HUD, exhaustion, starvation, and hunger-based natural regeneration
   are disabled.
 - Sprinting is always available.
-- Food may always be eaten and restores health directly.
-- Twelve ingredient families have predictable `intrinsics`.
-- Simple, preserved, meal, and special-meal tiers increase healing and effect
-  duration.
-- Forty authored foods are included.
-- All heat-processing recipes use the vanilla smoker, including the four
-  expedition meals.
-- Recipe chains unlock as their defining ingredients and preparations are
-  discovered.
-
-The internal food level remains full instead of being removed. This preserves
-compatibility with vanilla movement and systems that expect `FoodData` to
-exist.
+- Vanilla food may always be eaten and restores health directly.
+- The mod registers no custom food items or recipes.
+- Datapacks may optionally assign healing and effects to existing food items.
 
 ## Cooking data
 
@@ -54,7 +44,7 @@ An intrinsic defines one or more effects:
 }
 ```
 
-A food binds a registered item to a preparation tier and intrinsic:
+A food profile binds an existing item to a preparation tier and intrinsic:
 
 ```json
 {
@@ -67,26 +57,3 @@ A food binds a registered item to a preparation tier and intrinsic:
 
 Healing is measured in health points, where two points equal one heart.
 Durations are measured in ticks.
-
-## Development
-
-Build the current target:
-
-```shell
-./gradlew :1.21.1-neoforge:build
-```
-
-Start a client:
-
-```shell
-./gradlew :1.21.1-neoforge:runClient
-```
-
-Start a development server:
-
-```shell
-./gradlew :1.21.1-neoforge:runServer
-```
-
-The 1.20.1 Fabric port is scaffolded but has not yet been brought to feature
-parity.
