@@ -65,7 +65,6 @@ val generatedFabricMetadata = layout.buildDirectory.file("generated/fabricMetada
 val fabricResourceProperties = mapOf(
     "version" to project.version,
     "mc" to minecraftVersion,
-    "packFormat" to project.property("deps.resource_pack_format"),
     "modName" to project.property("mod.name"),
     "modId" to project.property("mod.id"),
     "modDescription" to project.property("mod.description"),

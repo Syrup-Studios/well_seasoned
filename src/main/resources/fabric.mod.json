@@ -20,7 +20,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.syrupstudios.wellseasoned.wellseasoned.java"
+      "net.syrupstudios.wellseasoned.loaders.fabric.FabricWellSeasoned"
     ]
   },
   "depends": {
