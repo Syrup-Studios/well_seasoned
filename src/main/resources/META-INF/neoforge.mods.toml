@@ -22,3 +22,5 @@ modId="minecraft"
 type="required"
 ordering="NONE"
 side="BOTH"
+
+${mixinConfig}

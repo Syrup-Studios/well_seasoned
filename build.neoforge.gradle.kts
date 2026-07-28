@@ -16,6 +16,11 @@ neoForge {
     version = neoForgeVersion
     runs {
         create("client") { client(); gameDirectory = project.file("run") }
+        create("server") {
+            server()
+            gameDirectory = project.file("run")
+            programArgument("--nogui")
+        }
     }
     mods.create(property("mod.id") as String) { sourceSet(sourceSets.main.get()) }
 }

@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "net.syrupstudios.wellseasoned.mixin",
+  "compatibilityLevel": "${java}",
+  "mixins": [
+    "FoodDataMixin",
+    "PlayerMixin"
+  ],
+  "client": [
+    "client.GuiMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
