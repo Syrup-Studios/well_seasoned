@@ -82,7 +82,11 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
     }
 
     private static IntrinsicDefinition parseIntrinsic(JsonObject json) {
+        /*? if >=1.20.5 {*/
         ResourceLocation id = ResourceLocation.parse(GsonHelper.getAsString(json, "id"));
+        /*?} else {*/
+        /*ResourceLocation id = new ResourceLocation(GsonHelper.getAsString(json, "id"));*/
+        /*?}*/
         String translation = GsonHelper.getAsString(json, "translation", "intrinsic." + id.getNamespace() + "." + id.getPath());
         int color = parseColor(GsonHelper.getAsString(json, "color", "#FFFFFF"));
         JsonArray effectArray = GsonHelper.getAsJsonArray(json, "effects");
@@ -91,7 +95,11 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
         for (JsonElement element : effectArray) {
             JsonObject effect = GsonHelper.convertToJsonObject(element, "effect");
             effects.add(new IntrinsicDefinition.EffectDefinition(
+                    /*? if >=1.20.5 {*/
                     ResourceLocation.parse(GsonHelper.getAsString(effect, "id")),
+                    /*?} else {*/
+                    /*new ResourceLocation(GsonHelper.getAsString(effect, "id")),*/
+                    /*?}*/
                     positiveInt(effect, "duration", 1),
                     nonNegativeInt(effect, "amplifier", 0),
                     positiveInt(effect, "maximum_duration", 20 * 60 * 20),
@@ -108,7 +116,11 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
     }
 
     private static FoodProfile parseFood(JsonObject json) {
+        /*? if >=1.20.5 {*/
         ResourceLocation item = ResourceLocation.parse(GsonHelper.getAsString(json, "item"));
+        /*?} else {*/
+        /*ResourceLocation item = new ResourceLocation(GsonHelper.getAsString(json, "item"));*/
+        /*?}*/
         PreparationTier tier;
         try {
             tier = PreparationTier.parse(GsonHelper.getAsString(json, "tier"));
@@ -124,7 +136,11 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
         JsonArray intrinsicArray = GsonHelper.getAsJsonArray(json, "intrinsics", new JsonArray());
         var intrinsicIds = new java.util.ArrayList<ResourceLocation>();
         for (JsonElement element : intrinsicArray) {
+            /*? if >=1.20.5 {*/
             intrinsicIds.add(ResourceLocation.parse(GsonHelper.convertToString(element, "intrinsic")));
+            /*?} else {*/
+            /*intrinsicIds.add(new ResourceLocation(GsonHelper.convertToString(element, "intrinsic")));*/
+            /*?}*/
         }
         if (intrinsicIds.isEmpty()) {
             throw new JsonParseException("Food " + item + " must reference at least one intrinsic");
