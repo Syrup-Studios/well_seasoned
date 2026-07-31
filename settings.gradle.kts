@@ -25,7 +25,7 @@ stonecutter {
             version("$version-$loader", version).buildscript = "build.$buildscript.gradle.kts"
         }
 
-        target("1.20.1", "fabric")
+        target("1.21.1", "fabric")
         target("1.21.1", "neoforge")
 
         vcsVersion = "1.21.1-neoforge"

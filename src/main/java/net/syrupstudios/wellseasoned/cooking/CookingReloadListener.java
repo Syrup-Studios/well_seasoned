@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 //? if fabric
 /*import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;*/
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
@@ -60,11 +61,7 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
             }
 
             ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(food.item()));
-            /*? if >=1.20.5 {*/
-            boolean isFood = stack.getFoodProperties(null) != null;
-            /*?} else {*/
-            /*boolean isFood = stack.getItem().getFoodProperties() != null;*/
-            /*?}*/
+            boolean isFood = stack.has(DataComponents.FOOD);
             if (!isFood) {
                 throw new JsonParseException("Configured item " + food.item() + " is not food");
             }
@@ -103,21 +100,13 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
     }
 
     private static IntrinsicDefinition parseIntrinsic(JsonObject json) {
-        /*? if >=1.20.5 {*/
         ResourceLocation id = ResourceLocation.parse(GsonHelper.getAsString(json, "id"));
-        /*?} else {*/
-        /*ResourceLocation id = new ResourceLocation(GsonHelper.getAsString(json, "id"));*/
-        /*?}*/
         JsonArray effectArray = GsonHelper.getAsJsonArray(json, "effects");
         var effects = new java.util.ArrayList<IntrinsicDefinition.EffectDefinition>();
 
         for (JsonElement element : effectArray) {
             JsonObject effect = GsonHelper.convertToJsonObject(element, "effect");
-            /*? if >=1.20.5 {*/
             ResourceLocation effectId = ResourceLocation.parse(GsonHelper.getAsString(effect, "id"));
-            /*?} else {*/
-            /*ResourceLocation effectId = new ResourceLocation(GsonHelper.getAsString(effect, "id"));*/
-            /*?}*/
             if (!BuiltInRegistries.MOB_EFFECT.containsKey(effectId)) {
                 throw new JsonParseException("Intrinsic " + id + " references unknown effect " + effectId);
             }
@@ -140,11 +129,7 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
     }
 
     private static FoodProfile parseFood(JsonObject json) {
-        /*? if >=1.20.5 {*/
         ResourceLocation item = ResourceLocation.parse(GsonHelper.getAsString(json, "item"));
-        /*?} else {*/
-        /*ResourceLocation item = new ResourceLocation(GsonHelper.getAsString(json, "item"));*/
-        /*?}*/
         PreparationTier tier;
         try {
             tier = PreparationTier.parse(GsonHelper.getAsString(json, "tier"));
@@ -160,11 +145,7 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
         JsonArray intrinsicArray = GsonHelper.getAsJsonArray(json, "intrinsics", new JsonArray());
         var intrinsicIds = new java.util.ArrayList<ResourceLocation>();
         for (JsonElement element : intrinsicArray) {
-            /*? if >=1.20.5 {*/
             ResourceLocation intrinsicId = ResourceLocation.parse(GsonHelper.convertToString(element, "intrinsic"));
-            /*?} else {*/
-            /*ResourceLocation intrinsicId = new ResourceLocation(GsonHelper.convertToString(element, "intrinsic"));*/
-            /*?}*/
             if (intrinsicIds.contains(intrinsicId)) {
                 throw new JsonParseException("Food " + item + " references intrinsic " + intrinsicId + " more than once");
             }

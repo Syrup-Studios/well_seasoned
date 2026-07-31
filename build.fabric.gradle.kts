@@ -11,11 +11,7 @@ plugins {
 val remappedMinecraft = stonecutter.eval(stonecutter.current.version, "<26")
 val modernHud = stonecutter.eval(stonecutter.current.version, ">=1.21.11")
 val minecraftVersion = property("deps.minecraft") as String
-val targetJavaVersion = when {
-    stonecutter.eval(stonecutter.current.version, ">=26") -> 25
-    stonecutter.eval(stonecutter.current.version, ">=1.20.5") -> 21
-    else -> 17
-}
+val targetJavaVersion = if (stonecutter.eval(stonecutter.current.version, ">=26")) 25 else 21
 val requiredJava = JavaVersion.toVersion(targetJavaVersion)
 
 apply(plugin = if (remappedMinecraft) "net.fabricmc.fabric-loom-remap" else "net.fabricmc.fabric-loom")

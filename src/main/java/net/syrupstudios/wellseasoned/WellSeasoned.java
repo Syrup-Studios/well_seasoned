@@ -27,10 +27,6 @@ public final class WellSeasoned {
     }
 
     public static ResourceLocation id(String path) {
-        /*? if >=1.20.5 {*/
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
-        /*?} else {*/
-        /*return new ResourceLocation(MOD_ID, path);*/
-        /*?}*/
     }
 }

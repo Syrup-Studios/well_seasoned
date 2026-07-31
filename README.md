@@ -23,7 +23,7 @@ with a minimum of one health point. Two health points equal one heart.
 
 | Minecraft | Mod loader | Java |
 | --- | --- | --- |
-| 1.20.1 | Fabric | 17 |
+| 1.21.1 | Fabric | 21 |
 | 1.21.1 | NeoForge | 21 |
 
 Fabric also requires Fabric API. Install the mod on both the client and server.
@@ -141,7 +141,7 @@ Use the included Gradle wrapper. The toolchain resolver can download the
 required JDK when needed.
 
 ```bash
-./gradlew :1.20.1-fabric:buildAndCollect \
+./gradlew :1.21.1-fabric:buildAndCollect \
   :1.21.1-neoforge:buildAndCollect
 ```
 
@@ -154,7 +154,7 @@ build/libs/<mod-version>/
 To run a development client, use one of these commands:
 
 ```bash
-./gradlew :1.20.1-fabric:runClient
+./gradlew :1.21.1-fabric:runClient
 ./gradlew :1.21.1-neoforge:runClient
 ```
 

@@ -1,6 +1,7 @@
 package net.syrupstudios.wellseasoned.cooking;
 
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -28,13 +29,8 @@ public final class FoodConsumptionService {
             return;
         }
 
-        /*? if >=1.20.5 {*/
-        FoodProperties vanillaFood = consumedStack.getFoodProperties(player);
+        FoodProperties vanillaFood = consumedStack.get(DataComponents.FOOD);
         int nutrition = vanillaFood == null ? 0 : vanillaFood.nutrition();
-        /*?} else {*/
-        /*FoodProperties vanillaFood = consumedStack.getItem().getFoodProperties();
-        int nutrition = vanillaFood == null ? 0 : vanillaFood.getNutrition();*/
-        /*?}*/
         if (nutrition > 0) {
             player.heal(Math.max(1.0F, nutrition * 0.5F));
         }
@@ -53,27 +49,16 @@ public final class FoodConsumptionService {
             }
 
             for (IntrinsicDefinition.EffectDefinition definition : intrinsic.effects()) {
-                /*? if >=1.20.5 {*/
                 BuiltInRegistries.MOB_EFFECT.getHolder(definition.effect()).ifPresent(holder ->
                         mergeEffect(player, holder, definition, profile.tier())
                 );
-                /*?} else {*/
-                /*MobEffect effect = BuiltInRegistries.MOB_EFFECT.get(definition.effect());
-                if (effect != null) {
-                    mergeEffect(player, effect, definition, profile.tier());
-                }*/
-                /*?}*/
             }
         }
     }
 
     private static void mergeEffect(
             Player player,
-            /*? if >=1.20.5 {*/
             Holder<MobEffect> effect,
-            /*?} else {*/
-            /*MobEffect effect,*/
-            /*?}*/
             IntrinsicDefinition.EffectDefinition definition,
             PreparationTier tier
     ) {
