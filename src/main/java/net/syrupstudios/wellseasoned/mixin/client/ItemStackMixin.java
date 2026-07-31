@@ -31,7 +31,7 @@ public abstract class ItemStackMixin {
             return;
         }
 
-        List<Component> foodLines = FoodTooltip.effectLines((ItemStack) (Object) this);
+        List<Component> foodLines = FoodTooltip.effectLines((ItemStack) (Object) this, context);
         if (!foodLines.isEmpty()) {
             tooltip.addAll(1, foodLines);
         }

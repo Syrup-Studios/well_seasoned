@@ -10,6 +10,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.syrupstudios.wellseasoned.WellSeasoned;
 import net.syrupstudios.wellseasoned.cooking.FoodEffectResolver;
@@ -37,7 +38,7 @@ public final class FoodTooltip {
         return Math.round(healing * 2.0F);
     }
 
-    public static List<Component> effectLines(ItemStack stack) {
+    public static List<Component> effectLines(ItemStack stack, Item.TooltipContext context) {
         ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(stack.getItem());
         FoodProfile profile = WellSeasoned.COOKING_DATA.food(itemId).orElse(null);
         FoodProperties food = stack.get(DataComponents.FOOD);
@@ -45,25 +46,31 @@ public final class FoodTooltip {
             return List.of();
         }
         List<Component> lines = new ArrayList<>();
-        addEffects(lines, food, profile);
+        addEffects(lines, food, profile, context.tickRate());
         return lines;
     }
 
-    private static void addEffects(List<Component> lines, FoodProperties food, FoodProfile profile) {
+    private static void addEffects(
+            List<Component> lines,
+            FoodProperties food,
+            FoodProfile profile,
+            float tickRate
+    ) {
         for (ResolvedFoodEffect effect : FoodEffectResolver.resolveForTooltip(
                 food,
                 profile,
-                WellSeasoned.COOKING_DATA.snapshot()
+            WellSeasoned.COOKING_DATA.snapshot()
         )) {
             BuiltInRegistries.MOB_EFFECT.getHolder(effect.effect()).ifPresent(holder ->
-                    lines.add(effectLine(holder, effect))
+                    lines.add(effectLine(holder, effect, tickRate))
             );
         }
     }
 
     private static Component effectLine(
             Holder<MobEffect> effect,
-            ResolvedFoodEffect resolved
+            ResolvedFoodEffect resolved,
+            float tickRate
     ) {
         int amplifier = resolved.amplifier();
         int duration = resolved.duration();
@@ -81,7 +88,7 @@ public final class FoodTooltip {
             name = Component.translatable(
                     "potion.withDuration",
                     name,
-                    MobEffectUtil.formatDuration(instance, 1.0F, 1.0F)
+                    MobEffectUtil.formatDuration(instance, 1.0F, tickRate)
             );
         }
         if (resolved.probability() < 1.0F) {
