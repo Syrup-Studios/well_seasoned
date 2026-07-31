@@ -34,7 +34,9 @@ public abstract class PlayerMixin {
     private void wellSeasoned$applyFoodBenefits(
             Level level,
             ItemStack stack,
+            /*? if >=1.20.5 {*/
             FoodProperties properties,
+            /*?}*/
             CallbackInfoReturnable<ItemStack> callback
     ) {
         FoodConsumptionService.finishEating((Player) (Object) this, stack);

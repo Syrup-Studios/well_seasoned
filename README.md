@@ -52,8 +52,6 @@ This complete example defines one intrinsic and assigns it to one food:
   "intrinsics": [
     {
       "id": "example:fortifying",
-      "translation": "intrinsic.example.fortifying",
-      "color": "#E8952E",
       "effects": [
         {
           "id": "minecraft:resistance",
@@ -106,8 +104,6 @@ For example, a preserved food with `healing: 3` restores 4.05 health points.
 | Field | Required | Default | Description |
 | --- | --- | --- | --- |
 | `id` | Yes | — | Unique namespaced ID for the intrinsic. |
-| `translation` | No | `intrinsic.<namespace>.<path>` | Translation key for display text. |
-| `color` | No | `#FFFFFF` | Six-digit RGB color. |
 | `effects` | Yes | — | One or more effect objects. |
 
 ### Effect fields

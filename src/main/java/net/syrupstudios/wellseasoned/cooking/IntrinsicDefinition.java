@@ -6,8 +6,6 @@ import java.util.List;
 
 public record IntrinsicDefinition(
         ResourceLocation id,
-        String translationKey,
-        int color,
         List<EffectDefinition> effects
 ) {
     public IntrinsicDefinition {
