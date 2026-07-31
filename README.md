@@ -80,10 +80,35 @@ This complete example defines one intrinsic and assigns it to one food:
 }
 ```
 
+A food entry can select all food items in an item tag. Use `tag` instead of
+`item`:
+
+```json
+{
+  "foods": [
+    {
+      "tag": "example:fruit",
+      "tier": "simple",
+      "healing": 2,
+      "intrinsics": [
+        "example:refreshing"
+      ]
+    }
+  ]
+}
+```
+
+The tag uses the normal datapack item-tag format. For the example above, define
+the tag at `data/example/tags/item/fruit.json`. Do not add a `#` before the tag
+ID. Missing and empty tags are allowed. Non-food items in a tag are ignored.
+
+An explicit `item` entry overrides a matching `tag` entry. If two configured
+tags contain the same food and there is no explicit item entry, reload fails.
+
 Run `/reload` after you change a catalog. Well Seasoned validates all catalogs
 as one set. If any catalog is invalid, the reload fails and the last valid set
-stays active. Intrinsic IDs and food item IDs must be unique across the full
-set.
+stays active. Intrinsic IDs, explicit food item IDs, and food tag IDs must be
+unique across the full set.
 
 ## Preparation tiers
 
@@ -137,7 +162,8 @@ probabilities are preserved.
 
 | Field | Required | Description |
 | --- | --- | --- |
-| `item` | Yes | Namespaced ID of an existing food item. |
+| `item` | Conditional | Namespaced ID of an existing food item. Use either `item` or `tag`. |
+| `tag` | Conditional | Namespaced ID of an item tag. Use either `tag` or `item`. |
 | `tier` | Yes | One of the four preparation tiers. |
 | `healing` | Yes | Base health points from `0` through `40`. |
 | `mode` | No | `append` keeps built-in item effects. `replace` removes them. The default is `append`. |
