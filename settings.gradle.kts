@@ -6,7 +6,6 @@ pluginManagement {
         maven("https://maven.kikugie.dev/releases") { name = "KikuGie Releases" }
         maven("https://maven.kikugie.dev/snapshots") { name = "KikuGie Snapshots" }
         maven("https://maven.fabricmc.net/")
-        maven("https://maven.minecraftforge.net/")
         maven("https://maven.neoforged.net/releases/")
     }
 }

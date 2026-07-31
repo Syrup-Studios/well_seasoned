@@ -9,7 +9,6 @@ plugins {
 }
 
 val remappedMinecraft = stonecutter.eval(stonecutter.current.version, "<26")
-val modernHud = stonecutter.eval(stonecutter.current.version, ">=1.21.11")
 val minecraftVersion = property("deps.minecraft") as String
 val targetJavaVersion = if (stonecutter.eval(stonecutter.current.version, ">=26")) 25 else 21
 val requiredJava = JavaVersion.toVersion(targetJavaVersion)
@@ -39,10 +38,6 @@ loomExtension.apply {
         }
     }
     runConfigs.configureEach { runDir = "run" }
-}
-
-if (modernHud) {
-    sourceSets.main { java.exclude("net/syrupstudios/colorfularmorbar/mixin/**") }
 }
 
 java {
@@ -76,13 +71,11 @@ val fabricResourceProperties = mapOf(
 )
 val generateFabricMetadata = tasks.register("generateFabricMetadata") {
     inputs.file(fabricMetadataSource)
-    inputs.property("modernHud", modernHud)
     inputs.property("contributors", fabricResourceProperties.getValue("contributors"))
     outputs.file(generatedFabricMetadata)
     doLast {
         @Suppress("UNCHECKED_CAST")
         val metadata = JsonSlurper().parse(fabricMetadataSource) as MutableMap<String, Any?>
-        if (modernHud) metadata.remove("mixins")
         if (fabricResourceProperties.getValue("contributors").toString().isBlank()) {
             metadata.remove("contributors")
         }
@@ -97,19 +90,15 @@ val generateFabricMetadata = tasks.register("generateFabricMetadata") {
 tasks.processResources {
     dependsOn(generateFabricMetadata)
     inputs.properties(fabricResourceProperties)
-    exclude("fabric.mod.json", "META-INF/mods.toml", "META-INF/neoforge.mods.toml")
+    exclude("fabric.mod.json", "META-INF/neoforge.mods.toml")
     from(generatedFabricMetadata) {
         rename { "fabric.mod.json" }
         expand(fabricResourceProperties)
     }
     filesMatching("pack.mcmeta") { expand(fabricResourceProperties) }
 
-    if (modernHud) {
-        exclude("*.mixins.json")
-    } else {
-        filesMatching("*.mixins.json") {
-            expand("java" to "JAVA_$targetJavaVersion", "refmapLine" to "")
-        }
+    filesMatching("*.mixins.json") {
+        expand("java" to "JAVA_$targetJavaVersion")
     }
 }
 

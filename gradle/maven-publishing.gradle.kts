@@ -12,6 +12,9 @@ val mavenRepositoryPassword = providers.gradleProperty("mavenRepositoryPassword"
     .orElse(providers.environmentVariable("MAVEN_REPOSITORY_PASSWORD"))
 val archiveName = extensions.getByType<BasePluginExtension>().archivesName.get()
 val javaComponent = components["java"]
+val projectHomepage = project.property("mod.homepage") as String
+val projectIssues = project.property("mod.issues") as String
+val projectSources = (project.property("mod.sources") as String).removeSuffix("/")
 
 extensions.configure<PublishingExtension> {
     publications {
@@ -22,7 +25,7 @@ extensions.configure<PublishingExtension> {
             pom {
                 name.set("${project.property("mod.name")} ($archiveName)")
                 description.set(project.property("mod.description") as String)
-                url.set("https://github.com/Syrup-Studios/syrup-library")
+                url.set(projectHomepage)
 
                 licenses {
                     license {
@@ -39,13 +42,13 @@ extensions.configure<PublishingExtension> {
                     }
                 }
                 scm {
-                    connection.set("scm:git:https://github.com/Syrup-Studios/syrup-library.git")
-                    developerConnection.set("scm:git:ssh://git@github.com/Syrup-Studios/syrup-library.git")
-                    url.set("https://github.com/Syrup-Studios/syrup-library")
+                    connection.set("scm:git:$projectSources.git")
+                    developerConnection.set("scm:git:$projectSources.git")
+                    url.set(projectSources)
                 }
                 issueManagement {
                     system.set("GitHub")
-                    url.set("https://github.com/Syrup-Studios/syrup-library/issues")
+                    url.set(projectIssues)
                 }
             }
         }
