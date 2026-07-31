@@ -6,6 +6,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.syrupstudios.wellseasoned.WellSeasoned;
 import net.syrupstudios.wellseasoned.cooking.CookingDataSnapshot;
+import net.syrupstudios.wellseasoned.cooking.FoodEffectMode;
 import net.syrupstudios.wellseasoned.cooking.FoodProfile;
 import net.syrupstudios.wellseasoned.cooking.IntrinsicDefinition;
 import net.syrupstudios.wellseasoned.cooking.PreparationTier;
@@ -56,6 +57,7 @@ public record CookingDataPayload(CookingDataSnapshot snapshot) implements Custom
             buffer.writeResourceLocation(food.item());
             buffer.writeVarInt(food.tier().ordinal());
             buffer.writeFloat(food.healing());
+            buffer.writeVarInt(food.effectMode().ordinal());
             buffer.writeVarInt(food.intrinsics().size());
             for (ResourceLocation intrinsic : food.intrinsics()) {
                 buffer.writeResourceLocation(intrinsic);
@@ -93,12 +95,22 @@ public record CookingDataPayload(CookingDataSnapshot snapshot) implements Custom
                 throw new IllegalArgumentException("Invalid preparation tier index " + tierIndex);
             }
             float healing = buffer.readFloat();
+            int effectModeIndex = buffer.readVarInt();
+            if (effectModeIndex < 0 || effectModeIndex >= FoodEffectMode.values().length) {
+                throw new IllegalArgumentException("Invalid food effect mode index " + effectModeIndex);
+            }
             int intrinsicIdCount = readCount(buffer);
             var intrinsicIds = new ArrayList<ResourceLocation>(intrinsicIdCount);
             for (int intrinsicIndex = 0; intrinsicIndex < intrinsicIdCount; intrinsicIndex++) {
                 intrinsicIds.add(buffer.readResourceLocation());
             }
-            foods.put(item, new FoodProfile(item, PreparationTier.values()[tierIndex], healing, intrinsicIds));
+            foods.put(item, new FoodProfile(
+                    item,
+                    PreparationTier.values()[tierIndex],
+                    healing,
+                    FoodEffectMode.values()[effectModeIndex],
+                    intrinsicIds
+            ));
         }
         return new CookingDataSnapshot(intrinsics, foods);
     }

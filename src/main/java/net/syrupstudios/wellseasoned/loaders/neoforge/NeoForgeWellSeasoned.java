@@ -27,7 +27,7 @@ public final class NeoForgeWellSeasoned {
     }
 
     private void registerPayloads(RegisterPayloadHandlersEvent event) {
-        event.registrar("1").playToClient(
+        event.registrar("2").playToClient(
                 CookingDataPayload.TYPE,
                 CookingDataPayload.STREAM_CODEC,
                 (payload, context) -> WellSeasoned.COOKING_DATA.replace(payload.snapshot())

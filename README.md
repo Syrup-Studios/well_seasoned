@@ -71,6 +71,7 @@ This complete example defines one intrinsic and assigns it to one food:
       "item": "example:pumpkin_jam",
       "tier": "preserved",
       "healing": 3,
+      "mode": "append",
       "intrinsics": [
         "example:fortifying"
       ]
@@ -127,6 +128,11 @@ half of the new duration, with a minimum addition of 20 ticks. The result
 cannot exceed `maximum_duration`. A weaker food effect does not replace a
 stronger active effect.
 
+When several food sources supply the same effect, the strongest amplifier
+wins. Effects with the same amplifier add their durations. The result cannot
+exceed the largest `maximum_duration` from those sources. Built-in item effect
+probabilities are preserved.
+
 ### Food fields
 
 | Field | Required | Description |
@@ -134,6 +140,7 @@ stronger active effect.
 | `item` | Yes | Namespaced ID of an existing food item. |
 | `tier` | Yes | One of the four preparation tiers. |
 | `healing` | Yes | Base health points from `0` through `40`. |
+| `mode` | No | `append` keeps built-in item effects. `replace` removes them. The default is `append`. |
 | `intrinsics` | Yes | One or more intrinsic IDs. |
 
 ## Build from source

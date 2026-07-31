@@ -137,6 +137,13 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
             throw new JsonParseException("Unknown preparation tier for " + item, exception);
         }
 
+        FoodEffectMode effectMode;
+        try {
+            effectMode = FoodEffectMode.parse(GsonHelper.getAsString(json, "mode", "append"));
+        } catch (IllegalArgumentException exception) {
+            throw new JsonParseException("Unknown effect mode for " + item, exception);
+        }
+
         float healing = GsonHelper.getAsFloat(json, "healing");
         if (!Float.isFinite(healing) || healing < 0.0F || healing > 40.0F) {
             throw new JsonParseException("Healing for " + item + " must be between 0 and 40");
@@ -155,7 +162,7 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
             throw new JsonParseException("Food " + item + " must reference at least one intrinsic");
         }
 
-        return new FoodProfile(item, tier, healing, intrinsicIds);
+        return new FoodProfile(item, tier, healing, effectMode, intrinsicIds);
     }
 
     private static int positiveInt(JsonObject json, String key, int fallback) {

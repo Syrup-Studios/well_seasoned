@@ -12,8 +12,9 @@ import net.minecraft.world.effect.MobEffectUtil;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.syrupstudios.wellseasoned.WellSeasoned;
+import net.syrupstudios.wellseasoned.cooking.FoodEffectResolver;
 import net.syrupstudios.wellseasoned.cooking.FoodProfile;
-import net.syrupstudios.wellseasoned.cooking.IntrinsicDefinition;
+import net.syrupstudios.wellseasoned.cooking.ResolvedFoodEffect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,36 +40,33 @@ public final class FoodTooltip {
     public static List<Component> effectLines(ItemStack stack) {
         ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(stack.getItem());
         FoodProfile profile = WellSeasoned.COOKING_DATA.food(itemId).orElse(null);
-        if (profile == null) {
+        FoodProperties food = stack.get(DataComponents.FOOD);
+        if (profile == null || food == null) {
             return List.of();
         }
         List<Component> lines = new ArrayList<>();
-        addEffects(lines, profile);
+        addEffects(lines, food, profile);
         return lines;
     }
 
-    private static void addEffects(List<Component> lines, FoodProfile profile) {
-        for (ResourceLocation intrinsicId : profile.intrinsics()) {
-            IntrinsicDefinition intrinsic = WellSeasoned.COOKING_DATA.snapshot().intrinsic(intrinsicId).orElse(null);
-            if (intrinsic == null) {
-                continue;
-            }
-
-            for (IntrinsicDefinition.EffectDefinition definition : intrinsic.effects()) {
-                BuiltInRegistries.MOB_EFFECT.getHolder(definition.effect()).ifPresent(holder ->
-                        lines.add(effectLine(holder, definition, profile))
-                );
-            }
+    private static void addEffects(List<Component> lines, FoodProperties food, FoodProfile profile) {
+        for (ResolvedFoodEffect effect : FoodEffectResolver.resolveForTooltip(
+                food,
+                profile,
+                WellSeasoned.COOKING_DATA.snapshot()
+        )) {
+            BuiltInRegistries.MOB_EFFECT.getHolder(effect.effect()).ifPresent(holder ->
+                    lines.add(effectLine(holder, effect))
+            );
         }
     }
 
     private static Component effectLine(
             Holder<MobEffect> effect,
-            IntrinsicDefinition.EffectDefinition definition,
-            FoodProfile profile
+            ResolvedFoodEffect resolved
     ) {
-        int amplifier = definition.effectiveAmplifier(profile.tier());
-        int duration = definition.effectiveDuration(profile.tier());
+        int amplifier = resolved.amplifier();
+        int duration = resolved.duration();
         MutableComponent name = Component.translatable(effect.value().getDescriptionId());
 
         if (amplifier > 0) {
@@ -85,6 +83,10 @@ public final class FoodTooltip {
                     name,
                     MobEffectUtil.formatDuration(instance, 1.0F, 1.0F)
             );
+        }
+        if (resolved.probability() < 1.0F) {
+            int percent = Math.round(resolved.probability() * 100.0F);
+            name = name.append(Component.literal(" (" + percent + "%)"));
         }
 
         return name.withStyle(effect.value().getCategory().getTooltipFormatting());

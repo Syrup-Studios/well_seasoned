@@ -8,6 +8,7 @@ public record FoodProfile(
         ResourceLocation item,
         PreparationTier tier,
         float healing,
+        FoodEffectMode effectMode,
         List<ResourceLocation> intrinsics
 ) {
     public FoodProfile {

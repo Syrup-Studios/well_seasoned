@@ -8,6 +8,7 @@ import net.syrupstudios.wellseasoned.cooking.FoodConsumptionService;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -37,6 +38,15 @@ public abstract class PlayerMixin {
             FoodProperties properties,
             CallbackInfoReturnable<ItemStack> callback
     ) {
-        FoodConsumptionService.finishEating((Player) (Object) this, stack);
+        FoodConsumptionService.finishEating((Player) (Object) this, stack, properties);
+    }
+
+    @ModifyVariable(method = "eat", at = @At("HEAD"), argsOnly = true)
+    private FoodProperties wellSeasoned$replaceHandledItemEffects(
+            FoodProperties properties,
+            Level level,
+            ItemStack stack
+    ) {
+        return FoodConsumptionService.withoutItemEffects(stack, properties);
     }
 }
