@@ -21,5 +21,12 @@ public record IntrinsicDefinition(
             boolean ambient,
             boolean showParticles
     ) {
+        public int effectiveDuration(PreparationTier tier) {
+            return Math.min(maximumDuration, Math.round(duration * tier.durationMultiplier()));
+        }
+
+        public int effectiveAmplifier(PreparationTier tier) {
+            return Math.min(maximumAmplifier, amplifier + tier.amplifierBonus());
+        }
     }
 }

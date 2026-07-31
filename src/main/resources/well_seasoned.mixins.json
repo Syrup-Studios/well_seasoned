@@ -8,7 +8,9 @@
     "PlayerMixin"
   ],
   "client": [
-    "client.GuiMixin"
+    "client.ClientTooltipComponentMixin",
+    "client.GuiMixin",
+    "client.ItemStackMixin"
   ],
   "injectors": {
     "defaultRequire": 1

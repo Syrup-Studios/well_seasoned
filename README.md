@@ -14,6 +14,7 @@ profiles.
 - Unconfigured food restores health instead of hunger.
 - Datapacks can set the healing, status effects, and preparation tier of any
   existing food item.
+- Food tooltips show the final heart value and configured status effects.
 - The same data works with vanilla items and items from other mods.
 
 An unconfigured food restores half of its vanilla nutrition value as health,

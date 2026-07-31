@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "net.syrupstudios.wellseasoned.loaders.fabric.FabricWellSeasoned"
+    ],
+    "client": [
+      "net.syrupstudios.wellseasoned.loaders.fabric.FabricClientWellSeasoned"
     ]
   },
   "depends": {

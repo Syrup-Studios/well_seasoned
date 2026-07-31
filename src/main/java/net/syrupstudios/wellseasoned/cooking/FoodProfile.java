@@ -13,4 +13,8 @@ public record FoodProfile(
     public FoodProfile {
         intrinsics = List.copyOf(intrinsics);
     }
+
+    public float effectiveHealing() {
+        return healing * tier.healingMultiplier();
+    }
 }

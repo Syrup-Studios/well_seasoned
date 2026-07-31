@@ -37,7 +37,7 @@ public final class FoodConsumptionService {
     }
 
     private static void applyProfile(Player player, FoodProfile profile) {
-        float healing = profile.healing() * profile.tier().healingMultiplier();
+        float healing = profile.effectiveHealing();
         if (healing > 0.0F) {
             player.heal(healing);
         }
@@ -62,14 +62,8 @@ public final class FoodConsumptionService {
             IntrinsicDefinition.EffectDefinition definition,
             PreparationTier tier
     ) {
-        int grantedDuration = Math.min(
-                definition.maximumDuration(),
-                Math.round(definition.duration() * tier.durationMultiplier())
-        );
-        int grantedAmplifier = Math.min(
-                definition.maximumAmplifier(),
-                definition.amplifier() + tier.amplifierBonus()
-        );
+        int grantedDuration = definition.effectiveDuration(tier);
+        int grantedAmplifier = definition.effectiveAmplifier(tier);
 
         MobEffectInstance current = player.getEffect(effect);
         if (current != null) {
