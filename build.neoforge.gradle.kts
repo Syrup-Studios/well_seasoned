@@ -13,6 +13,12 @@ version = "${property("mod.version")}+$minecraftVersion-neoforge"
 group = property("mod.group") as String
 base.archivesName = property("mod.id") as String
 
+dependencies {
+    testImplementation(platform("org.junit:junit-bom:5.11.4"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
 neoForge {
     version = neoForgeVersion
     runs {
@@ -23,7 +29,11 @@ neoForge {
             programArgument("--nogui")
         }
     }
-    mods.create(property("mod.id") as String) { sourceSet(sourceSets.main.get()) }
+    val wellSeasonedMod = mods.create(property("mod.id") as String) { sourceSet(sourceSets.main.get()) }
+    unitTest {
+        testedMod = wellSeasonedMod
+        enable()
+    }
 }
 
 java {
@@ -37,6 +47,10 @@ java {
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.release.set(targetJavaVersion)
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
 
 tasks.processResources {

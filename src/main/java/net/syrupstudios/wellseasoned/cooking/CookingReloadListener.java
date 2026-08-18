@@ -46,7 +46,10 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
     protected CookingDataDefinitions prepare(ResourceManager resourceManager, ProfilerFiller profiler) {
         Map<ResourceLocation, JsonElement> resources = new HashMap<>();
         SimpleJsonResourceReloadListener.scanDirectory(resourceManager, DIRECTORY, GSON, resources);
+        return parseDefinitions(resources);
+    }
 
+    static CookingDataDefinitions parseDefinitions(Map<ResourceLocation, JsonElement> resources) {
         Map<ResourceLocation, IntrinsicDefinition> intrinsics = new HashMap<>();
         Map<ResourceLocation, FoodProfile> itemFoods = new HashMap<>();
         Map<ResourceLocation, TaggedFoodProfile> taggedFoods = new HashMap<>();
@@ -71,7 +74,7 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
             }
 
             ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(food.item()));
-            boolean isFood = stack.has(DataComponents.FOOD);
+            boolean isFood = stack.has(DataComponents.FOOD) || FoodConsumptionService.isCake(food.item());
             if (!isFood) {
                 throw new JsonParseException("Configured item " + food.item() + " is not food");
             }
@@ -137,7 +140,8 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
                     positiveInt(effect, "maximum_duration", 20 * 60 * 20),
                     nonNegativeInt(effect, "maximum_amplifier", 2),
                     GsonHelper.getAsBoolean(effect, "ambient", false),
-                    GsonHelper.getAsBoolean(effect, "show_particles", true)
+                    GsonHelper.getAsBoolean(effect, "show_particles", true),
+                    chance(effect)
             ));
         }
 
@@ -189,11 +193,16 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
             }
             intrinsicIds.add(intrinsicId);
         }
-        if (intrinsicIds.isEmpty()) {
-            throw new JsonParseException("Food " + selector + " must reference at least one intrinsic");
-        }
 
         return new ParsedFoodProfile(item, tag, tier, healing, effectMode, intrinsicIds);
+    }
+
+    private static float chance(JsonObject effect) {
+        float value = GsonHelper.getAsFloat(effect, "chance", 1.0F);
+        if (!Float.isFinite(value) || value < 0.0F || value > 1.0F) {
+            throw new JsonParseException("chance must be between 0 and 1");
+        }
+        return value;
     }
 
     private static void validateIntrinsics(
@@ -208,7 +217,7 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
         }
     }
 
-    private static Map<ResourceLocation, FoodProfile> expandTags(
+    static Map<ResourceLocation, FoodProfile> expandTags(
             Map<ResourceLocation, FoodProfile> itemFoods,
             Map<ResourceLocation, TaggedFoodProfile> taggedFoods
     ) {

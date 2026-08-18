@@ -19,8 +19,15 @@ public record IntrinsicDefinition(
             int maximumDuration,
             int maximumAmplifier,
             boolean ambient,
-            boolean showParticles
+            boolean showParticles,
+            float chance
     ) {
+        public EffectDefinition {
+            if (!Float.isFinite(chance) || chance < 0.0F || chance > 1.0F) {
+                throw new IllegalArgumentException("Effect chance must be between 0 and 1");
+            }
+        }
+
         public int effectiveDuration(PreparationTier tier) {
             return Math.min(maximumDuration, Math.round(duration * tier.durationMultiplier()));
         }

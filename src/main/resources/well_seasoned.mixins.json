@@ -4,13 +4,15 @@
   "package": "net.syrupstudios.wellseasoned.mixin",
   "compatibilityLevel": "${java}",
   "mixins": [
+    "CakeBlockMixin",
     "FoodDataMixin",
     "PlayerMixin"
   ],
   "client": [
     "client.ClientTooltipComponentMixin",
     "client.GuiMixin",
-    "client.ItemStackMixin"
+    "client.ItemStackMixin",
+    "client.SuspiciousStewItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1

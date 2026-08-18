@@ -29,6 +29,9 @@ dependencies {
     val modConfiguration = if (remappedMinecraft) "modImplementation" else "implementation"
     add(modConfiguration, "net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
     add(modConfiguration, "net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
+    testImplementation(platform("org.junit:junit-bom:5.11.4"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 loomExtension.apply {
@@ -115,6 +118,10 @@ tasks.register<Copy>("buildAndCollect") {
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.release.set(targetJavaVersion)
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
 
 apply(from = rootProject.file("gradle/maven-publishing.gradle.kts"))

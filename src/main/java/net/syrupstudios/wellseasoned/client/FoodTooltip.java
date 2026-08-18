@@ -90,7 +90,7 @@ public final class FoodTooltip {
         }
         if (resolved.probability() < 1.0F) {
             int percent = Math.round(resolved.probability() * 100.0F);
-            name = name.append(Component.literal(" (" + percent + "%)"));
+            name = name.append(Component.translatable("well_seasoned.food_effect.chance", percent));
         }
 
         return name.withStyle(effect.value().getCategory().getTooltipFormatting());

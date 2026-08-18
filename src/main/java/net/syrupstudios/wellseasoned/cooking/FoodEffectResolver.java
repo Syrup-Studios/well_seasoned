@@ -37,7 +37,11 @@ public final class FoodEffectResolver {
                 .filter(effect -> random.nextFloat() < effect.probability())
                 .map(FoodEffectResolver::certain)
                 .toList();
-        return resolve(selectedItemEffects, configuredEffects(profile, snapshot), profile.effectMode());
+        List<ResolvedFoodEffect> selectedConfiguredEffects = configuredEffects(profile, snapshot).stream()
+                .filter(effect -> random.nextFloat() < effect.probability())
+                .map(FoodEffectResolver::certain)
+                .toList();
+        return resolve(selectedItemEffects, selectedConfiguredEffects, profile.effectMode());
     }
 
     /**
@@ -99,7 +103,7 @@ public final class FoodEffectResolver {
                         definition.ambient(),
                         definition.showParticles(),
                         true,
-                        1.0F
+                        definition.chance()
                 ));
             }
         }

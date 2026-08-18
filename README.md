@@ -144,9 +144,25 @@ For example, a preserved food with `healing: 3` restores 4.05 health points.
 | `maximum_amplifier` | No | `2` | Effect-level cap, where `2` is level III. |
 | `ambient` | No | `false` | Uses the ambient effect style. |
 | `show_particles` | No | `true` | Shows effect particles. |
+| `chance` | No | `1.0` | Probability from `0.0` through `1.0` that the configured effect is applied when the food is consumed. |
 
 There are 20 ticks in one second. The tier multiplier is applied before the
 duration and amplifier caps.
+
+A `chance` below `1.0` is rolled separately for each configured effect each time
+the food is consumed. The roll happens server-side when the food is eaten, not
+during loading, tooltip rendering, or profile creation. A failed roll adds no
+effect: it does not merge durations and does not extend an active effect.
+Healing always applies normally. For example, an effect with a 30% chance:
+
+```json
+{
+  "id": "minecraft:nausea",
+  "duration": 100,
+  "amplifier": 0,
+  "chance": 0.3
+}
+```
 
 If a player already has the same effect at the same level, eating the food adds
 half of the new duration, with a minimum addition of 20 ticks. The result
@@ -156,7 +172,9 @@ stronger active effect.
 When several food sources supply the same effect, the strongest amplifier
 wins. Effects with the same amplifier add their durations. The result cannot
 exceed the largest `maximum_duration` from those sources. Built-in item effect
-probabilities are preserved.
+probabilities are preserved. With `mode: "append"`, the built-in effect
+probabilities of vanilla items (for example the 60% Poison of a poisonous
+potato) stay intact alongside the configured effects.
 
 ### Food fields
 
@@ -167,7 +185,7 @@ probabilities are preserved.
 | `tier` | Yes | One of the four preparation tiers. |
 | `healing` | Yes | Base health points from `0` through `40`. |
 | `mode` | No | `append` keeps built-in item effects. `replace` removes them. The default is `append`. |
-| `intrinsics` | Yes | One or more intrinsic IDs. |
+| `intrinsics` | Yes | One or more intrinsic IDs. May be empty for a food that only restores health. |
 
 ## Build from source
 

@@ -15,24 +15,40 @@ public final class FoodHealingResolver {
     private FoodHealingResolver() {
     }
 
-    /** Resolves the healing of the stack's FOOD component, or zero for non-food stacks. */
+    /**
+     * Resolves the healing of a stack. Items without a FOOD component (such as
+     * the cake block item) still honor a configured profile, otherwise zero.
+     */
     public static float resolve(ItemStack stack) {
         FoodProperties food = stack.get(DataComponents.FOOD);
         if (food == null) {
-            return 0.0F;
+            return resolveConfigured(stack);
         }
         return resolve(stack, food);
     }
 
     /** Resolves the healing for an edible stack using its already-known FOOD component. */
     public static float resolve(ItemStack stack, FoodProperties foodProperties) {
+        float configured = resolveConfigured(stack);
+        if (configured >= 0.0F) {
+            return configured;
+        }
+
+        int nutrition = foodProperties.nutrition();
+        return nutrition > 0 ? Math.max(1.0F, nutrition * 0.5F) : 0.0F;
+    }
+
+    /**
+     * Returns the profile healing for a stack, or -1 when no profile applies.
+     * The -1 sentinel distinguishes "no profile" from a legitimate zero-healing
+     * configured food.
+     */
+    private static float resolveConfigured(ItemStack stack) {
         ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(stack.getItem());
         FoodProfile profile = WellSeasoned.COOKING_DATA.food(itemId).orElse(null);
         if (profile != null) {
             return profile.effectiveHealing();
         }
-
-        int nutrition = foodProperties.nutrition();
-        return nutrition > 0 ? Math.max(1.0F, nutrition * 0.5F) : 0.0F;
+        return -1.0F;
     }
 }

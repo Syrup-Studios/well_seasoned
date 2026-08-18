@@ -1,0 +1,483 @@
+{
+  "intrinsics": [
+    {
+      "id": "well_seasoned:regeneration_5s",
+      "effects": [
+        {
+          "id": "minecraft:regeneration",
+          "duration": 100,
+          "amplifier": 0
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:regeneration_10s",
+      "effects": [
+        {
+          "id": "minecraft:regeneration",
+          "duration": 200,
+          "amplifier": 0
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:speed_5s",
+      "effects": [
+        {
+          "id": "minecraft:speed",
+          "duration": 100,
+          "amplifier": 0
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:speed_10s",
+      "effects": [
+        {
+          "id": "minecraft:speed",
+          "duration": 200,
+          "amplifier": 0
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:slow_falling_5s",
+      "effects": [
+        {
+          "id": "minecraft:slow_falling",
+          "duration": 100,
+          "amplifier": 0
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:water_breathing_10s",
+      "effects": [
+        {
+          "id": "minecraft:water_breathing",
+          "duration": 200,
+          "amplifier": 0
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:water_breathing_15s",
+      "effects": [
+        {
+          "id": "minecraft:water_breathing",
+          "duration": 300,
+          "amplifier": 0
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:nausea_5s",
+      "effects": [
+        {
+          "id": "minecraft:nausea",
+          "duration": 100,
+          "amplifier": 0
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:nausea_5s_30_percent",
+      "effects": [
+        {
+          "id": "minecraft:nausea",
+          "duration": 100,
+          "amplifier": 0,
+          "chance": 0.3
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:jump_boost_15s",
+      "effects": [
+        {
+          "id": "minecraft:jump_boost",
+          "duration": 300,
+          "amplifier": 0
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:jump_boost_30s",
+      "effects": [
+        {
+          "id": "minecraft:jump_boost",
+          "duration": 600,
+          "amplifier": 0
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:absorption_20s",
+      "effects": [
+        {
+          "id": "minecraft:absorption",
+          "duration": 400,
+          "amplifier": 0
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:night_vision_30s",
+      "effects": [
+        {
+          "id": "minecraft:night_vision",
+          "duration": 600,
+          "amplifier": 0
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:poison_5s",
+      "effects": [
+        {
+          "id": "minecraft:poison",
+          "duration": 100,
+          "amplifier": 0
+        }
+      ]
+    },
+    {
+      "id": "well_seasoned:pufferfish_poison",
+      "effects": [
+        {
+          "id": "minecraft:poison",
+          "duration": 1200,
+          "amplifier": 3,
+          "maximum_amplifier": 3
+        }
+      ]
+    }
+  ],
+  "foods": [
+    {
+      "item": "minecraft:potato",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:beetroot",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:carrot",
+      "tier": "simple",
+      "healing": 2,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:apple",
+      "tier": "simple",
+      "healing": 2,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:regeneration_5s"
+      ]
+    },
+    {
+      "item": "minecraft:melon_slice",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:speed_5s"
+      ]
+    },
+    {
+      "item": "minecraft:sweet_berries",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:speed_5s"
+      ]
+    },
+    {
+      "item": "minecraft:glow_berries",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:speed_5s"
+      ]
+    },
+    {
+      "item": "minecraft:chorus_fruit",
+      "tier": "simple",
+      "healing": 2,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:slow_falling_5s"
+      ]
+    },
+    {
+      "item": "minecraft:dried_kelp",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:water_breathing_10s"
+      ]
+    },
+    {
+      "item": "minecraft:poisonous_potato",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:poison_5s"
+      ]
+    },
+    {
+      "item": "minecraft:spider_eye",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:poison_5s"
+      ]
+    },
+    {
+      "item": "minecraft:pufferfish",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:pufferfish_poison"
+      ]
+    },
+    {
+      "item": "minecraft:rotten_flesh",
+      "tier": "simple",
+      "healing": 2,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:nausea_5s"
+      ]
+    },
+    {
+      "item": "minecraft:chicken",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:nausea_5s_30_percent"
+      ]
+    },
+    {
+      "item": "minecraft:beef",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:porkchop",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:mutton",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:rabbit",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:cod",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:salmon",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:tropical_fish",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:cooked_beef",
+      "tier": "simple",
+      "healing": 4,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:cooked_porkchop",
+      "tier": "simple",
+      "healing": 4,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:cooked_chicken",
+      "tier": "simple",
+      "healing": 3,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:cooked_mutton",
+      "tier": "simple",
+      "healing": 3,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:cooked_rabbit",
+      "tier": "simple",
+      "healing": 3,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:jump_boost_15s"
+      ]
+    },
+    {
+      "item": "minecraft:cooked_cod",
+      "tier": "simple",
+      "healing": 3,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:cooked_salmon",
+      "tier": "simple",
+      "healing": 3,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:water_breathing_15s"
+      ]
+    },
+    {
+      "item": "minecraft:baked_potato",
+      "tier": "simple",
+      "healing": 3,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:bread",
+      "tier": "simple",
+      "healing": 3,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:cookie",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:speed_10s"
+      ]
+    },
+    {
+      "item": "minecraft:cake",
+      "tier": "simple",
+      "healing": 1,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:speed_10s"
+      ]
+    },
+    {
+      "item": "minecraft:honey_bottle",
+      "tier": "simple",
+      "healing": 3,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:regeneration_10s"
+      ]
+    },
+    {
+      "item": "minecraft:mushroom_stew",
+      "tier": "simple",
+      "healing": 3,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:beetroot_soup",
+      "tier": "simple",
+      "healing": 3,
+      "mode": "replace",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:suspicious_stew",
+      "tier": "simple",
+      "healing": 3,
+      "mode": "append",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:rabbit_stew",
+      "tier": "simple",
+      "healing": 5,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:jump_boost_30s"
+      ]
+    },
+    {
+      "item": "minecraft:pumpkin_pie",
+      "tier": "simple",
+      "healing": 4,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:absorption_20s"
+      ]
+    },
+    {
+      "item": "minecraft:golden_apple",
+      "tier": "simple",
+      "healing": 4,
+      "mode": "append",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:enchanted_golden_apple",
+      "tier": "simple",
+      "healing": 4,
+      "mode": "append",
+      "intrinsics": []
+    },
+    {
+      "item": "minecraft:golden_carrot",
+      "tier": "simple",
+      "healing": 3,
+      "mode": "replace",
+      "intrinsics": [
+        "well_seasoned:night_vision_30s"
+      ]
+    }
+  ]
+}

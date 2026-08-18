@@ -49,6 +49,7 @@ public record CookingDataPayload(CookingDataSnapshot snapshot) implements Custom
                 buffer.writeVarInt(effect.maximumAmplifier());
                 buffer.writeBoolean(effect.ambient());
                 buffer.writeBoolean(effect.showParticles());
+                buffer.writeFloat(effect.chance());
             }
         }
 
@@ -80,7 +81,8 @@ public record CookingDataPayload(CookingDataSnapshot snapshot) implements Custom
                         buffer.readVarInt(),
                         buffer.readVarInt(),
                         buffer.readBoolean(),
-                        buffer.readBoolean()
+                        buffer.readBoolean(),
+                        buffer.readFloat()
                 ));
             }
             intrinsics.put(id, new IntrinsicDefinition(id, effects));
