@@ -14,6 +14,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.syrupstudios.wellseasoned.WellSeasoned;
 import net.syrupstudios.wellseasoned.cooking.FoodEffectResolver;
+import net.syrupstudios.wellseasoned.cooking.FoodHealingResolver;
 import net.syrupstudios.wellseasoned.cooking.FoodProfile;
 import net.syrupstudios.wellseasoned.cooking.ResolvedFoodEffect;
 
@@ -30,12 +31,8 @@ public final class FoodTooltip {
             return -1;
         }
 
-        ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(stack.getItem());
-        FoodProfile profile = WellSeasoned.COOKING_DATA.food(itemId).orElse(null);
-        float healing = profile == null
-                ? Math.max(1.0F, vanillaFood.nutrition() * 0.5F)
-                : profile.effectiveHealing();
-        return Math.round(healing * 2.0F);
+        float healing = FoodHealingResolver.resolve(stack, vanillaFood);
+        return healing > 0.0F ? Math.round(healing * 2.0F) : -1;
     }
 
     public static List<Component> effectLines(ItemStack stack, Item.TooltipContext context) {

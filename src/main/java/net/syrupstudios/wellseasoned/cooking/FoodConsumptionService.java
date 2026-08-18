@@ -25,13 +25,13 @@ public final class FoodConsumptionService {
                 BuiltInRegistries.ITEM.getKey(consumedStack.getItem())
         );
         if (configured.isPresent()) {
-            applyProfile(player, foodProperties, configured.get());
+            applyProfile(player, foodProperties, configured.get(), consumedStack);
             return;
         }
 
-        int nutrition = foodProperties.nutrition();
-        if (nutrition > 0) {
-            player.heal(Math.max(1.0F, nutrition * 0.5F));
+        float healing = FoodHealingResolver.resolve(consumedStack, foodProperties);
+        if (healing > 0.0F) {
+            player.heal(healing);
         }
     }
 
@@ -50,8 +50,13 @@ public final class FoodConsumptionService {
         );
     }
 
-    private static void applyProfile(Player player, FoodProperties foodProperties, FoodProfile profile) {
-        float healing = profile.effectiveHealing();
+    private static void applyProfile(
+            Player player,
+            FoodProperties foodProperties,
+            FoodProfile profile,
+            ItemStack consumedStack
+    ) {
+        float healing = FoodHealingResolver.resolve(consumedStack, foodProperties);
         if (healing > 0.0F) {
             player.heal(healing);
         }
