@@ -28,7 +28,8 @@
   "depends": {
     "fabricloader": ">=${fl}",
     "minecraft": "=${mc}",
-    "fabric-api": "${fapi}"
+    "fabric-api": "${fapi}",
+    "syrup_library": ">=0.2.0"
   },
   "mixins": [
     "${modId}.mixins.json"

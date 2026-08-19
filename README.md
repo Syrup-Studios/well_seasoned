@@ -27,7 +27,9 @@ with a minimum of one health point. Two health points equal one heart.
 | 1.21.1 | Fabric | 21 |
 | 1.21.1 | NeoForge | 21 |
 
-Fabric also requires Fabric API. Install the mod on both the client and server.
+Fabric also requires Fabric API. Both loaders require Syrup Library, which
+provides the typed configuration system. Install all required mods on both the
+client and server.
 
 ## Datapack setup
 
@@ -164,10 +166,17 @@ Healing always applies normally. For example, an effect with a 30% chance:
 }
 ```
 
-If a player already has the same effect at the same level, eating the food adds
-half of the new duration, with a minimum addition of 20 ticks. The result
-cannot exceed `maximum_duration`. A weaker food effect does not replace a
-stronger active effect.
+If a player already has the same effect at the same level, Well Seasoned adds a
+reduced portion of the incoming duration. The reduction follows a logarithmic
+curve based on the ratio between the active duration and the incoming duration.
+
+The first application grants the full duration. Repeated stacking remains
+beneficial but becomes progressively less efficient. The more duration a player
+already has, the less the next food adds. Waiting for an effect to tick down
+makes the next food more efficient again.
+
+The final duration still cannot exceed `maximum_duration`. A weaker food effect
+does not replace a stronger active effect.
 
 When several food sources supply the same effect, the strongest amplifier
 wins. Effects with the same amplifier add their durations. The result cannot
@@ -186,6 +195,60 @@ potato) stay intact alongside the configured effects.
 | `healing` | Yes | Base health points from `0` through `40`. |
 | `mode` | No | `append` keeps built-in item effects. `replace` removes them. The default is `append`. |
 | `intrinsics` | Yes | One or more intrinsic IDs. May be empty for a food that only restores health. |
+
+## Configuration
+
+Well Seasoned reads global settings from `well_seasoned.json5` in the loader
+config directory, using the typed configuration system provided by Syrup
+Library. The file is created automatically with the defaults on first load. A
+missing file or a missing field falls back to the defaults. Out-of-range
+numbers are clamped.
+
+```json
+{
+  "effect_duration_stacking": {
+    "mode": "logarithmic",
+    "strength": 1.0
+  }
+}
+```
+
+`mode` selects how repeated equal-level effects stack:
+
+| Mode | Behavior |
+| --- | --- |
+| `logarithmic` | Default. Reduced additions follow a logarithmic curve. |
+| `linear_half` | Legacy behavior: always add half of the incoming duration, with a minimum addition of 20 ticks. |
+
+`strength` controls how aggressive logarithmic diminishing returns are. The
+default is `1.0`. A value of `0.0` disables diminishing returns entirely.
+Valid range: `0.0` through `100.0`.
+
+### Logarithmic duration stacking
+
+When a player already has the same effect at the same level, Well Seasoned adds
+a reduced portion of the incoming duration:
+
+```text
+addedDuration = incomingDuration / (1 + strength * log2(1 + currentDuration / incomingDuration))
+```
+
+The reduction depends on the ratio between the active duration and the incoming
+duration, so it behaves the same way for short and long food effects.
+
+At strength `1.0`, stacking onto an equal remaining duration adds exactly half
+of the incoming duration. The final duration still cannot exceed
+`maximum_duration`.
+
+`strength` examples when the current duration equals the incoming duration:
+
+| strength | Incoming duration added |
+| ---: | ---: |
+| `0.0` | 100% |
+| `0.5` | ~66.7% |
+| `1.0` | 50% |
+| `1.5` | 40% |
+| `2.0` | ~33.3% |
 
 ## Build from source
 

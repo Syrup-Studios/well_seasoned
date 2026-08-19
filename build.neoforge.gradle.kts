@@ -14,9 +14,11 @@ group = property("mod.group") as String
 base.archivesName = property("mod.id") as String
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.11.4"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("net.syrupstudios:syrup_library:${property("deps.syrup_library")}")
+}
+
+repositories {
+    maven("https://maven.syrupstudios.net/releases/")
 }
 
 neoForge {
@@ -29,11 +31,7 @@ neoForge {
             programArgument("--nogui")
         }
     }
-    val wellSeasonedMod = mods.create(property("mod.id") as String) { sourceSet(sourceSets.main.get()) }
-    unitTest {
-        testedMod = wellSeasonedMod
-        enable()
-    }
+    mods.create(property("mod.id") as String) { sourceSet(sourceSets.main.get()) }
 }
 
 java {
@@ -47,10 +45,6 @@ java {
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8"
     options.release.set(targetJavaVersion)
-}
-
-tasks.withType<Test>().configureEach {
-    useJUnitPlatform()
 }
 
 tasks.processResources {

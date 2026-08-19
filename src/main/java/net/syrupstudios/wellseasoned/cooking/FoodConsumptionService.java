@@ -121,34 +121,69 @@ public final class FoodConsumptionService {
             Holder<MobEffect> effect,
             ResolvedFoodEffect resolved
     ) {
-        int grantedDuration = resolved.duration();
-        int grantedAmplifier = resolved.amplifier();
+        MobEffectInstance applied = resolveAppliedEffect(
+                effect,
+                player.getEffect(effect),
+                resolved,
+                WellSeasonedConfig.stackingMode(),
+                WellSeasonedConfig.stackingStrength()
+        );
+        if (applied != null) {
+            player.addEffect(applied);
+        }
+    }
 
-        MobEffectInstance current = player.getEffect(effect);
-        if (current != null) {
-            if (current.getAmplifier() > grantedAmplifier) {
-                return;
+    /**
+     * Computes the MobEffectInstance to apply for one resolved food effect, or
+     * null when nothing should be applied (incoming weaker than the active
+     * effect, or the active effect is already infinite). Equal amplifiers stack
+     * their durations through the configured diminishing-returns curve; the
+     * stronger-effect path replaces the active effect unchanged.
+     */
+    static MobEffectInstance resolveAppliedEffect(
+            Holder<MobEffect> effect,
+            MobEffectInstance current,
+            ResolvedFoodEffect resolved,
+            DurationStacking.StackingMode stackingMode,
+            double stackingStrength
+    ) {
+        if (current == null) {
+            return new MobEffectInstance(
+                    effect,
+                    resolved.duration(),
+                    resolved.amplifier(),
+                    resolved.ambient(),
+                    resolved.showParticles(),
+                    resolved.showIcon()
+            );
+        }
+        if (current.getAmplifier() > resolved.amplifier()) {
+            return null;
+        }
+
+        int grantedDuration = resolved.duration();
+        if (current.getAmplifier() == resolved.amplifier()) {
+            if (current.isInfiniteDuration()) {
+                return null;
             }
-            if (current.getAmplifier() == grantedAmplifier) {
-                if (current.isInfiniteDuration()) {
-                    return;
-                }
-                if (grantedDuration != MobEffectInstance.INFINITE_DURATION) {
-                    grantedDuration = Math.min(
-                            resolved.maximumDuration(),
-                            current.getDuration() + Math.max(20, grantedDuration / 2)
-                    );
-                }
+            if (grantedDuration != MobEffectInstance.INFINITE_DURATION) {
+                grantedDuration = DurationStacking.calculateStackedDuration(
+                        current.getDuration(),
+                        grantedDuration,
+                        resolved.maximumDuration(),
+                        stackingStrength,
+                        stackingMode
+                );
             }
         }
 
-        player.addEffect(new MobEffectInstance(
+        return new MobEffectInstance(
                 effect,
                 grantedDuration,
-                grantedAmplifier,
+                resolved.amplifier(),
                 resolved.ambient(),
                 resolved.showParticles(),
                 resolved.showIcon()
-        ));
+        );
     }
 }
