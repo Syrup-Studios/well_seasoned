@@ -27,9 +27,10 @@ with a minimum of one health point. Two health points equal one heart.
 | 1.21.1 | Fabric | 21 |
 | 1.21.1 | NeoForge | 21 |
 
-Fabric also requires Fabric API. Both loaders require Syrup Library, which
-provides the typed configuration system. Install all required mods on both the
-client and server.
+Fabric also requires Fabric API. Syrup Library, which provides the typed
+configuration system, is bundled inside the Well Seasoned jar (jar-in-jar), so
+it does not need to be installed separately. Install the mod and its required
+dependencies on both the client and server.
 
 ## Datapack setup
 

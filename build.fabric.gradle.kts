@@ -34,6 +34,7 @@ dependencies {
     add(modConfiguration, "net.fabricmc:fabric-loader:${property("deps.fabric_loader")}")
     add(modConfiguration, "net.fabricmc.fabric-api:fabric-api:${property("deps.fabric_api")}")
     add(modConfiguration, "net.syrupstudios:syrup_library:${property("deps.syrup_library")}")
+    add("include", "net.syrupstudios:syrup_library:${property("deps.syrup_library")}")
 }
 
 loomExtension.apply {

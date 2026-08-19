@@ -15,6 +15,7 @@ base.archivesName = property("mod.id") as String
 
 dependencies {
     implementation("net.syrupstudios:syrup_library:${property("deps.syrup_library")}")
+    jarJar("net.syrupstudios:syrup_library:${property("deps.syrup_library")}")
 }
 
 repositories {

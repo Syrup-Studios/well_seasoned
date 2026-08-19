@@ -28,7 +28,7 @@ side="BOTH"
 [[dependencies.${modId}]]
 modId="syrup_library"
 type="required"
-versionRange="[0.2.0,)"
+versionRange="*"
 ordering="NONE"
 side="BOTH"
 
