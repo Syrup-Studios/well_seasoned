@@ -18,12 +18,33 @@ public final class FoodConsumptionService {
 
     private static final FoodProperties NO_EFFECTS_FOOD =
             new FoodProperties(0, 0.0F, false, 1.6F, Optional.empty(), List.of());
+    private static final ThreadLocal<Integer> DIRECT_FOOD_DATA_SUPPRESSION_DEPTH =
+            ThreadLocal.withInitial(() -> 0);
 
     private FoodConsumptionService() {
     }
 
     public static boolean isCake(ResourceLocation item) {
         return CAKE_ITEM.equals(item);
+    }
+
+    /** Prevents the raw FoodData hook from duplicating a specialized block hook. */
+    public static void beginDirectFoodDataSuppression() {
+        DIRECT_FOOD_DATA_SUPPRESSION_DEPTH.set(DIRECT_FOOD_DATA_SUPPRESSION_DEPTH.get() + 1);
+    }
+
+    /** Ends a specialized block hook. */
+    public static void endDirectFoodDataSuppression() {
+        int depth = DIRECT_FOOD_DATA_SUPPRESSION_DEPTH.get() - 1;
+        if (depth <= 0) {
+            DIRECT_FOOD_DATA_SUPPRESSION_DEPTH.remove();
+        } else {
+            DIRECT_FOOD_DATA_SUPPRESSION_DEPTH.set(depth);
+        }
+    }
+
+    public static boolean isDirectFoodDataSuppressed() {
+        return DIRECT_FOOD_DATA_SUPPRESSION_DEPTH.get() > 0;
     }
 
     public static void finishEating(Player player, ItemStack consumedStack, FoodProperties foodProperties) {
@@ -75,6 +96,18 @@ public final class FoodConsumptionService {
             BuiltInRegistries.MOB_EFFECT.getHolder(effect.effect()).ifPresent(holder ->
                     mergeEffect(player, holder, effect)
             );
+        }
+    }
+
+    /** Applies fallback healing for direct FoodData calls with no known item. */
+    public static void finishEatingUnprofiled(Player player, int nutrition) {
+        if (player.level().isClientSide() || player.isSpectator()) {
+            return;
+        }
+
+        float healing = FoodHealingResolver.resolveNutrition(nutrition);
+        if (healing > 0.0F) {
+            player.heal(healing);
         }
     }
 

@@ -34,7 +34,11 @@ public final class FoodHealingResolver {
             return configured;
         }
 
-        int nutrition = foodProperties.nutrition();
+        return resolveNutrition(foodProperties.nutrition());
+    }
+
+    /** Resolves fallback healing when no item or configured profile is known. */
+    public static float resolveNutrition(int nutrition) {
         return nutrition > 0 ? Math.max(1.0F, nutrition * 0.5F) : 0.0F;
     }
 

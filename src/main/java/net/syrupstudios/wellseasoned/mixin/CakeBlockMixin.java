@@ -23,6 +23,18 @@ public abstract class CakeBlockMixin {
             Player player,
             CallbackInfoReturnable<InteractionResult> callback
     ) {
+        FoodConsumptionService.beginDirectFoodDataSuppression();
         FoodConsumptionService.finishEatingCake(player);
+    }
+
+    @Inject(method = "eat", at = @At("RETURN"))
+    private static void wellSeasoned$finishTrackedCakeConsumption(
+            LevelAccessor level,
+            BlockPos pos,
+            BlockState state,
+            Player player,
+            CallbackInfoReturnable<InteractionResult> callback
+    ) {
+        FoodConsumptionService.endDirectFoodDataSuppression();
     }
 }
