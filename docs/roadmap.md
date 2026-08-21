@@ -1,7 +1,5 @@
 # Planned features
 
-[Back to README](../README.md)
-
 The roadmap is split into three systems. These features are planned. They are
 not part of the current release unless another document states that they are
 already supported.

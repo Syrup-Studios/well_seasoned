@@ -1,7 +1,5 @@
 # Overview
 
-[Back to README](../README.md)
-
 Well Seasoned replaces Minecraft's hunger loop with direct healing and
 data-driven food effects. The mod supplies the food system. Modpacks and
 datapacks supply the food profiles.

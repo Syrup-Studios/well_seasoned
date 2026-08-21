@@ -1,0 +1,1 @@
+- added "compat" for modded block foods like supplementaries pancakes and nature spirit pizza, should work for any kind of food block

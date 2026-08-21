@@ -1,7 +1,5 @@
 # Build from source
 
-[Back to README](../README.md)
-
 Use the included Gradle wrapper. The toolchain resolver can download the
 required JDK when needed.
 

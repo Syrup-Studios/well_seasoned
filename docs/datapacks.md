@@ -1,7 +1,5 @@
 # Datapack setup and catalog reference
 
-[Back to README](../README.md)
-
 Place cooking catalogs in this directory:
 
 ```text

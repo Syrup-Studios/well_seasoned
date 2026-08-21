@@ -1,7 +1,5 @@
 # Configuration
 
-[Back to README](../README.md)
-
 Well Seasoned reads global settings from `well_seasoned.json5` in the loader
 config directory. It uses the typed configuration system from Syrup Library.
 The file is created automatically with the defaults on first load. A missing
