@@ -15,7 +15,3 @@ profiles.
 - [Build from source](docs/building.md)
 - [Planned features](docs/roadmap.md)
 
-## Links
-
-- [Source code](https://github.com/Syrup-Studios/well_seasoned)
-- [Issue tracker](https://github.com/Syrup-Studios/well_seasoned/issues)
