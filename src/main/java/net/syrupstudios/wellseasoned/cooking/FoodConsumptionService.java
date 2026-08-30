@@ -1,6 +1,8 @@
 package net.syrupstudios.wellseasoned.cooking;
 
+/*? if >=1.20.5 {*/
 import net.minecraft.core.Holder;
+/*?}*/
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -14,10 +16,14 @@ import java.util.List;
 import java.util.Optional;
 
 public final class FoodConsumptionService {
-    public static final ResourceLocation CAKE_ITEM = ResourceLocation.withDefaultNamespace("cake");
+    public static final ResourceLocation CAKE_ITEM = WellSeasoned.vanillaId("cake");
 
     private static final FoodProperties NO_EFFECTS_FOOD =
+            /*? if >=1.20.5 {*/
             new FoodProperties(0, 0.0F, false, 1.6F, Optional.empty(), List.of());
+            /*?} else {*/
+            /*new FoodProperties.Builder().nutrition(0).saturationMod(0.0F).build();*/
+            /*?}*/
     private static final ThreadLocal<Integer> DIRECT_FOOD_DATA_SUPPRESSION_DEPTH =
             ThreadLocal.withInitial(() -> 0);
 
@@ -66,6 +72,15 @@ public final class FoodConsumptionService {
         }
     }
 
+    /*? if <1.20.5 {*/
+    public static void finishEating(Player player, ItemStack consumedStack) {
+        FoodProperties foodProperties = FoodCompat.food(consumedStack);
+        if (foodProperties != null) {
+            finishEating(player, consumedStack, foodProperties);
+        }
+    }
+    /*?}*/
+
     /**
      * Applies the cake food profile for one eaten cake slice. Vanilla cake
      * consumption never passes through Player.eat, so the block mixin routes
@@ -93,9 +108,16 @@ public final class FoodConsumptionService {
                 WellSeasoned.COOKING_DATA.snapshot(),
                 player.getRandom()
         )) {
+            /*? if >=1.20.5 {*/
             BuiltInRegistries.MOB_EFFECT.getHolder(effect.effect()).ifPresent(holder ->
                     mergeEffect(player, holder, effect)
             );
+            /*?} else {*/
+            /*MobEffect mobEffect = BuiltInRegistries.MOB_EFFECT.get(effect.effect());
+            if (mobEffect != null) {
+                mergeEffect(player, mobEffect, effect);
+            }*/
+            /*?}*/
         }
     }
 
@@ -116,6 +138,7 @@ public final class FoodConsumptionService {
         if (WellSeasoned.COOKING_DATA.food(BuiltInRegistries.ITEM.getKey(stack.getItem())).isEmpty()) {
             return foodProperties;
         }
+        /*? if >=1.20.5 {*/
         return new FoodProperties(
                 foodProperties.nutrition(),
                 foodProperties.saturation(),
@@ -124,6 +147,9 @@ public final class FoodConsumptionService {
                 foodProperties.usingConvertsTo(),
                 List.of()
         );
+        /*?} else {*/
+        /*return foodProperties;*/
+        /*?}*/
     }
 
     private static void applyProfile(
@@ -143,15 +169,26 @@ public final class FoodConsumptionService {
                 WellSeasoned.COOKING_DATA.snapshot(),
                 player.getRandom()
         )) {
+            /*? if >=1.20.5 {*/
             BuiltInRegistries.MOB_EFFECT.getHolder(effect.effect()).ifPresent(holder ->
                     mergeEffect(player, holder, effect)
             );
+            /*?} else {*/
+            /*MobEffect mobEffect = BuiltInRegistries.MOB_EFFECT.get(effect.effect());
+            if (mobEffect != null) {
+                mergeEffect(player, mobEffect, effect);
+            }*/
+            /*?}*/
         }
     }
 
     private static void mergeEffect(
             Player player,
-            Holder<MobEffect> effect,
+            /*? if >=1.20.5 {*/
+            net.minecraft.core.Holder<MobEffect> effect,
+            /*?} else {*/
+            /*MobEffect effect,*/
+            /*?}*/
             ResolvedFoodEffect resolved
     ) {
         MobEffectInstance applied = resolveAppliedEffect(
@@ -174,7 +211,11 @@ public final class FoodConsumptionService {
      * stronger-effect path replaces the active effect unchanged.
      */
     static MobEffectInstance resolveAppliedEffect(
+            /*? if >=1.20.5 {*/
             Holder<MobEffect> effect,
+            /*?} else {*/
+            /*MobEffect effect,*/
+            /*?}*/
             MobEffectInstance current,
             ResolvedFoodEffect resolved,
             DurationStacking.StackingMode stackingMode,

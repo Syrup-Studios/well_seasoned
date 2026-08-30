@@ -8,7 +8,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 //? if fabric
 /*import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;*/
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -74,7 +73,7 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
             }
 
             ItemStack stack = new ItemStack(BuiltInRegistries.ITEM.get(food.item()));
-            boolean isFood = stack.has(DataComponents.FOOD) || FoodConsumptionService.isCake(food.item());
+            boolean isFood = FoodCompat.isFood(stack) || FoodConsumptionService.isCake(food.item());
             if (!isFood) {
                 throw new JsonParseException("Configured item " + food.item() + " is not food");
             }
@@ -122,13 +121,13 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
     }
 
     private static IntrinsicDefinition parseIntrinsic(JsonObject json) {
-        ResourceLocation id = ResourceLocation.parse(GsonHelper.getAsString(json, "id"));
+        ResourceLocation id = parseResource(GsonHelper.getAsString(json, "id"));
         JsonArray effectArray = GsonHelper.getAsJsonArray(json, "effects");
         var effects = new java.util.ArrayList<IntrinsicDefinition.EffectDefinition>();
 
         for (JsonElement element : effectArray) {
             JsonObject effect = GsonHelper.convertToJsonObject(element, "effect");
-            ResourceLocation effectId = ResourceLocation.parse(GsonHelper.getAsString(effect, "id"));
+            ResourceLocation effectId = parseResource(GsonHelper.getAsString(effect, "id"));
             if (!BuiltInRegistries.MOB_EFFECT.containsKey(effectId)) {
                 throw new JsonParseException("Intrinsic " + id + " references unknown effect " + effectId);
             }
@@ -159,10 +158,10 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
         }
 
         ResourceLocation item = hasItem
-                ? ResourceLocation.parse(GsonHelper.getAsString(json, "item"))
+                ? parseResource(GsonHelper.getAsString(json, "item"))
                 : null;
         ResourceLocation tag = hasTag
-                ? ResourceLocation.parse(GsonHelper.getAsString(json, "tag"))
+                ? parseResource(GsonHelper.getAsString(json, "tag"))
                 : null;
         String selector = item != null ? "item " + item : "tag " + tag;
         PreparationTier tier;
@@ -187,7 +186,7 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
         JsonArray intrinsicArray = GsonHelper.getAsJsonArray(json, "intrinsics", new JsonArray());
         var intrinsicIds = new java.util.ArrayList<ResourceLocation>();
         for (JsonElement element : intrinsicArray) {
-            ResourceLocation intrinsicId = ResourceLocation.parse(GsonHelper.convertToString(element, "intrinsic"));
+            ResourceLocation intrinsicId = parseResource(GsonHelper.convertToString(element, "intrinsic"));
             if (intrinsicIds.contains(intrinsicId)) {
                 throw new JsonParseException("Food " + selector + " references intrinsic " + intrinsicId + " more than once");
             }
@@ -203,6 +202,14 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
             throw new JsonParseException("chance must be between 0 and 1");
         }
         return value;
+    }
+
+    private static ResourceLocation parseResource(String value) {
+        /*? if >=1.20.5 {*/
+        return ResourceLocation.parse(value);
+        /*?} else {*/
+        /*return new ResourceLocation(value);*/
+        /*?}*/
     }
 
     private static void validateIntrinsics(
@@ -229,7 +236,7 @@ public final class CookingReloadListener extends SimplePreparableReloadListener<
             for (var holder : BuiltInRegistries.ITEM.getTagOrEmpty(tag)) {
                 Item item = holder.value();
                 ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(item);
-                if (itemFoods.containsKey(itemId) || !new ItemStack(item).has(DataComponents.FOOD)) {
+                if (itemFoods.containsKey(itemId) || !FoodCompat.isFood(new ItemStack(item))) {
                     continue;
                 }
 

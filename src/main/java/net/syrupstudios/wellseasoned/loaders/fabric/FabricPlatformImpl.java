@@ -1,7 +1,6 @@
 package net.syrupstudios.wellseasoned.loaders.fabric;
 
-//? if fabric {
-/*import net.fabricmc.api.EnvType;
+import net.fabricmc.api.EnvType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.syrupstudios.wellseasoned.loaders.Platform;
 
@@ -34,4 +33,3 @@ public final class FabricPlatformImpl implements Platform {
         return "fabric";
     }
 }
-*///?}

@@ -6,6 +6,8 @@ import java.nio.file.Path;
 public interface Platform {
     //? if fabric
     /*Platform INSTANCE = new net.syrupstudios.wellseasoned.loaders.fabric.FabricPlatformImpl();*/
+    //? if forge
+    /*Platform INSTANCE = new net.syrupstudios.wellseasoned.loaders.forge.ForgePlatformImpl();*/
     //? if neoforge
     Platform INSTANCE = new net.syrupstudios.wellseasoned.loaders.neoforge.NeoForgePlatformImpl();
 

@@ -1,8 +1,12 @@
 package net.syrupstudios.wellseasoned.network;
 
+/*? if >=1.20.5 {*/
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+/*?} else {*/
+import net.minecraft.network.FriendlyByteBuf;
+/*?}*/
 import net.minecraft.resources.ResourceLocation;
 import net.syrupstudios.wellseasoned.WellSeasoned;
 import net.syrupstudios.wellseasoned.cooking.CookingDataSnapshot;
@@ -15,7 +19,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public record CookingDataPayload(CookingDataSnapshot snapshot) implements CustomPacketPayload {
+public record CookingDataPayload(CookingDataSnapshot snapshot)
+        /*? if >=1.20.5 {*/
+        implements CustomPacketPayload
+        /*?}*/
+{
+    /*? if >=1.20.5 {*/
     public static final Type<CookingDataPayload> TYPE =
             new Type<>(WellSeasoned.id("cooking_data"));
     public static final StreamCodec<RegistryFriendlyByteBuf, CookingDataPayload> STREAM_CODEC =
@@ -35,8 +44,27 @@ public record CookingDataPayload(CookingDataSnapshot snapshot) implements Custom
     public Type<? extends CustomPacketPayload> type() {
         return TYPE;
     }
+    /*?} else {*/
+    /*public static void encode(FriendlyByteBuf buffer, CookingDataPayload payload) {
+        writeSnapshot(buffer, payload.snapshot);
+    }
 
-    private static void writeSnapshot(RegistryFriendlyByteBuf buffer, CookingDataSnapshot snapshot) {
+    public static void encode(CookingDataPayload payload, FriendlyByteBuf buffer) {
+        encode(buffer, payload);
+    }
+
+    public static CookingDataPayload decode(FriendlyByteBuf buffer) {
+        return new CookingDataPayload(readSnapshot(buffer));
+    }*/
+    /*?}*/
+
+    private static void writeSnapshot(
+            /*? if >=1.20.5 {*/
+            RegistryFriendlyByteBuf buffer
+            /*?} else {*/
+            /*FriendlyByteBuf buffer*/
+            /*?}*/
+            , CookingDataSnapshot snapshot) {
         buffer.writeVarInt(snapshot.intrinsics().size());
         for (IntrinsicDefinition intrinsic : snapshot.intrinsics().values()) {
             buffer.writeResourceLocation(intrinsic.id());
@@ -66,7 +94,13 @@ public record CookingDataPayload(CookingDataSnapshot snapshot) implements Custom
         }
     }
 
-    private static CookingDataSnapshot readSnapshot(RegistryFriendlyByteBuf buffer) {
+    private static CookingDataSnapshot readSnapshot(
+            /*? if >=1.20.5 {*/
+            RegistryFriendlyByteBuf buffer
+            /*?} else {*/
+            /*FriendlyByteBuf buffer*/
+            /*?}*/
+    ) {
         Map<ResourceLocation, IntrinsicDefinition> intrinsics = new HashMap<>();
         int intrinsicCount = readCount(buffer);
         for (int index = 0; index < intrinsicCount; index++) {
@@ -117,7 +151,13 @@ public record CookingDataPayload(CookingDataSnapshot snapshot) implements Custom
         return new CookingDataSnapshot(intrinsics, foods);
     }
 
-    private static int readCount(RegistryFriendlyByteBuf buffer) {
+    private static int readCount(
+            /*? if >=1.20.5 {*/
+            RegistryFriendlyByteBuf buffer
+            /*?} else {*/
+            /*FriendlyByteBuf buffer*/
+            /*?}*/
+    ) {
         int count = buffer.readVarInt();
         if (count < 0 || count > 65_536) {
             throw new IllegalArgumentException("Invalid cooking data collection size " + count);

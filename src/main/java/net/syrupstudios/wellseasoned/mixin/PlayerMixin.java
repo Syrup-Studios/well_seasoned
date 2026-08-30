@@ -35,12 +35,19 @@ public abstract class PlayerMixin {
     private void wellSeasoned$applyFoodBenefits(
             Level level,
             ItemStack stack,
+            /*? if >=1.20.5 {*/
             FoodProperties properties,
+            /*?}*/
             CallbackInfoReturnable<ItemStack> callback
     ) {
+        /*? if >=1.20.5 {*/
         FoodConsumptionService.finishEating((Player) (Object) this, stack, properties);
+        /*?} else {*/
+        /*FoodConsumptionService.finishEating((Player) (Object) this, stack);*/
+        /*?}*/
     }
 
+    /*? if >=1.20.5 {*/
     @ModifyVariable(method = "eat", at = @At("HEAD"), argsOnly = true)
     private FoodProperties wellSeasoned$replaceHandledItemEffects(
             FoodProperties properties,
@@ -49,4 +56,5 @@ public abstract class PlayerMixin {
     ) {
         return FoodConsumptionService.withoutItemEffects(stack, properties);
     }
+    /*?}*/
 }

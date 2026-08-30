@@ -21,7 +21,11 @@ public abstract class SuspiciousStewItemMixin {
     @Inject(method = "appendHoverText", at = @At("HEAD"), cancellable = true)
     private void wellSeasoned$hideSuspiciousStewEffect(
             ItemStack stack,
+            /*? if >=1.20.5 {*/
             Item.TooltipContext context,
+            /*?} else {*/
+            /*net.minecraft.world.level.Level level,*/
+            /*?}*/
             List<Component> tooltip,
             TooltipFlag flag,
             CallbackInfo callback

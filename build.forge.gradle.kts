@@ -1,42 +1,46 @@
 plugins {
-    id("net.neoforged.moddev") version "2.0.137"
+    id("net.neoforged.moddev.legacyforge") version "2.0.137"
     id("me.modmuss50.mod-publish-plugin") version "2.2.0"
     id("maven-publish")
 }
 
-val minecraftVersion = property("deps.minecraft") as String
-val neoForgeVersion = property("deps.neoforge_version") as String
-val targetJavaVersion = if (stonecutter.eval(stonecutter.current.version, ">=26")) 25 else 21
-val requiredJava = JavaVersion.toVersion(targetJavaVersion)
+val mcVersionValue = property("deps.minecraft") as String
+val forgeVersionValue = property("deps.forge_version") as String
+val targetJavaVersion = 17
+val requiredJava = JavaVersion.VERSION_17
+val modId = property("mod.id") as String
 
-version = "${property("mod.version")}+$minecraftVersion-neoforge"
+version = "${property("mod.version")}+$mcVersionValue-forge"
 group = property("mod.group") as String
 base.archivesName = property("mod.id") as String
-
-dependencies {
-    implementation("net.syrupstudios:syrup_library:${property("deps.syrup_library")}")
-    jarJar("net.syrupstudios:syrup_library:${property("deps.syrup_library")}")
-}
 
 repositories {
     maven("https://maven.syrupstudios.net/releases/")
 }
 
-neoForge {
-    version = neoForgeVersion
+legacyForge {
+    setVersion("$mcVersionValue-$forgeVersionValue")
     runs {
-        create("client") { client(); gameDirectory = project.file("run") }
+        create("client") {
+            client()
+            gameDirectory = project.file("run")
+        }
         create("server") {
             server()
             gameDirectory = project.file("run")
             programArgument("--nogui")
         }
     }
-    mods.create(property("mod.id") as String) { sourceSet(sourceSets.main.get()) }
+    mods.create(modId) { sourceSet(sourceSets.main.get()) }
 }
 
 sourceSets.main {
     java.exclude("net/syrupstudios/wellseasoned/loaders/fabric/**")
+}
+
+dependencies {
+    implementation("net.syrupstudios:syrup_library:${property("deps.syrup_library")}")
+    jarJar("net.syrupstudios:syrup_library:${property("deps.syrup_library")}")
 }
 
 java {
@@ -55,9 +59,9 @@ tasks.withType<JavaCompile>().configureEach {
 tasks.processResources {
     val props = mapOf(
         "version" to project.version,
-        "mc" to minecraftVersion,
+        "mc" to mcVersionValue,
         "packFormat" to project.property("deps.resource_pack_format"),
-        "neoforge" to neoForgeVersion,
+        "forge" to forgeVersionValue,
         "modName" to project.property("mod.name"),
         "modId" to project.property("mod.id"),
         "modDescription" to project.property("mod.description"),
@@ -67,15 +71,17 @@ tasks.processResources {
         "homepage" to project.property("mod.homepage"),
         "issues" to project.property("mod.issues"),
         "sources" to project.property("mod.sources"),
-        "mixinConfig" to "[[mixins]]\nconfig=\"${project.property("mod.id")}.mixins.json\""
+        "mixinConfig" to "${project.property("mod.id")}.mixins.json"
     )
     inputs.properties(props)
-    filesMatching("META-INF/neoforge.mods.toml") { expand(props) }
+    filesMatching("META-INF/mods.toml") { expand(props) }
     filesMatching("pack.mcmeta") { expand(props) }
-    filesMatching("*.mixins.json") {
-        expand("java" to "JAVA_$targetJavaVersion")
-    }
-    exclude("fabric.mod.json")
+    filesMatching("*.mixins.json") { expand("java" to "JAVA_$targetJavaVersion") }
+    exclude("fabric.mod.json", "META-INF/neoforge.mods.toml")
+}
+
+tasks.jar {
+    manifest.attributes["MixinConfigs"] = "$modId.mixins.json"
 }
 
 tasks.register<Copy>("buildAndCollect") {

@@ -1,6 +1,5 @@
 package net.syrupstudios.wellseasoned.cooking;
 
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.food.FoodProperties;
@@ -20,7 +19,7 @@ public final class FoodHealingResolver {
      * the cake block item) still honor a configured profile, otherwise zero.
      */
     public static float resolve(ItemStack stack) {
-        FoodProperties food = stack.get(DataComponents.FOOD);
+        FoodProperties food = FoodCompat.food(stack);
         if (food == null) {
             return resolveConfigured(stack);
         }
@@ -34,7 +33,7 @@ public final class FoodHealingResolver {
             return configured;
         }
 
-        return resolveNutrition(foodProperties.nutrition());
+        return resolveNutrition(FoodCompat.nutrition(foodProperties));
     }
 
     /** Resolves fallback healing when no item or configured profile is known. */

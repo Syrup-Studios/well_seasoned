@@ -4,12 +4,13 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.resources.ResourceLocation;
+import net.syrupstudios.wellseasoned.WellSeasoned;
 
 public final class ClientFoodHeartTooltip implements ClientTooltipComponent {
     private static final ResourceLocation CONTAINER =
-            ResourceLocation.withDefaultNamespace("hud/heart/container");
+            WellSeasoned.vanillaId("hud/heart/container");
     private static final ResourceLocation FULL =
-            ResourceLocation.withDefaultNamespace("hud/heart/full");
+            WellSeasoned.vanillaId("hud/heart/full");
     private static final int HEART_SIZE = 9;
     private static final int HEART_SPACING = 8;
     private static final int HEARTS_PER_ROW = 10;
@@ -40,18 +41,18 @@ public final class ClientFoodHeartTooltip implements ClientTooltipComponent {
             int slotY = y + (slot / HEARTS_PER_ROW) * ROW_HEIGHT;
             int filledQuarters = Math.min(4, Math.max(0, quarters - slot * 4));
 
-            graphics.blitSprite(CONTAINER, slotX, slotY, HEART_SIZE, HEART_SIZE);
+            ClientRenderCompat.blitHeart(graphics, CONTAINER, slotX, slotY, HEART_SIZE);
             if (filledQuarters == 0) {
                 continue;
             }
             if (filledQuarters == 4) {
-                graphics.blitSprite(FULL, slotX, slotY, HEART_SIZE, HEART_SIZE);
+                ClientRenderCompat.blitHeart(graphics, FULL, slotX, slotY, HEART_SIZE);
                 continue;
             }
 
             int filledWidth = (HEART_SIZE * filledQuarters + 3) / 4;
             graphics.enableScissor(slotX, slotY, slotX + filledWidth, slotY + HEART_SIZE);
-            graphics.blitSprite(FULL, slotX, slotY, HEART_SIZE, HEART_SIZE);
+            ClientRenderCompat.blitHeart(graphics, FULL, slotX, slotY, HEART_SIZE);
             graphics.disableScissor();
         }
     }

@@ -11,7 +11,11 @@ plugins {
 
 val remappedMinecraft = stonecutter.eval(stonecutter.current.version, "<26")
 val minecraftVersion = property("deps.minecraft") as String
-val targetJavaVersion = if (stonecutter.eval(stonecutter.current.version, ">=26")) 25 else 21
+val targetJavaVersion = when {
+    minecraftVersion.startsWith("1.20.") -> 17
+    stonecutter.eval(stonecutter.current.version, ">=26") -> 25
+    else -> 21
+}
 val requiredJava = JavaVersion.toVersion(targetJavaVersion)
 
 apply(plugin = if (remappedMinecraft) "net.fabricmc.fabric-loom-remap" else "net.fabricmc.fabric-loom")
@@ -96,6 +100,7 @@ val generateFabricMetadata = tasks.register("generateFabricMetadata") {
 
 tasks.processResources {
     dependsOn(generateFabricMetadata)
+    inputs.property("targetJavaVersion", targetJavaVersion)
     inputs.properties(fabricResourceProperties)
     exclude("fabric.mod.json", "META-INF/neoforge.mods.toml")
     from(generatedFabricMetadata) {

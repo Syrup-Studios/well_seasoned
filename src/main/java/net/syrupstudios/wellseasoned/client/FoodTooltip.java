@@ -1,7 +1,5 @@
 package net.syrupstudios.wellseasoned.client;
 
-import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -26,7 +24,7 @@ public final class FoodTooltip {
     }
 
     public static int heartQuarters(ItemStack stack) {
-        FoodProperties vanillaFood = stack.get(DataComponents.FOOD);
+        FoodProperties vanillaFood = net.syrupstudios.wellseasoned.cooking.FoodCompat.food(stack);
         if (vanillaFood == null) {
             return -1;
         }
@@ -35,15 +33,26 @@ public final class FoodTooltip {
         return healing > 0.0F ? Math.round(healing * 2.0F) : -1;
     }
 
-    public static List<Component> effectLines(ItemStack stack, Item.TooltipContext context) {
+    public static List<Component> effectLines(
+            ItemStack stack,
+            /*? if >=1.20.5 {*/
+            Item.TooltipContext context
+            /*?} else {*/
+            /*net.minecraft.world.entity.player.Player player*/
+            /*?}*/
+    ) {
         ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(stack.getItem());
         FoodProfile profile = WellSeasoned.COOKING_DATA.food(itemId).orElse(null);
-        FoodProperties food = stack.get(DataComponents.FOOD);
+        FoodProperties food = net.syrupstudios.wellseasoned.cooking.FoodCompat.food(stack);
         if (profile == null || food == null) {
             return List.of();
         }
         List<Component> lines = new ArrayList<>();
+        /*? if >=1.20.5 {*/
         addEffects(lines, food, profile, context.tickRate());
+        /*?} else {*/
+        addEffects(lines, food, profile, 1.0F);
+        /*?}*/
         return lines;
     }
 
@@ -58,20 +67,35 @@ public final class FoodTooltip {
                 profile,
             WellSeasoned.COOKING_DATA.snapshot()
         )) {
+            /*? if >=1.20.5 {*/
             BuiltInRegistries.MOB_EFFECT.getHolder(effect.effect()).ifPresent(holder ->
                     lines.add(effectLine(holder, effect, tickRate))
             );
+            /*?} else {*/
+            /*MobEffect mobEffect = BuiltInRegistries.MOB_EFFECT.get(effect.effect());
+            if (mobEffect != null) {
+                lines.add(effectLine(mobEffect, effect, tickRate));
+            }*/
+            /*?}*/
         }
     }
 
     private static Component effectLine(
-            Holder<MobEffect> effect,
+            /*? if >=1.20.5 {*/
+            net.minecraft.core.Holder<MobEffect> effect,
+            /*?} else {*/
+            /*MobEffect effect,*/
+            /*?}*/
             ResolvedFoodEffect resolved,
             float tickRate
     ) {
         int amplifier = resolved.amplifier();
         int duration = resolved.duration();
+        /*? if >=1.20.5 {*/
         MutableComponent name = Component.translatable(effect.value().getDescriptionId());
+        /*?} else {*/
+        /*MutableComponent name = Component.translatable(effect.getDescriptionId());*/
+        /*?}*/
 
         if (amplifier > 0) {
             name = Component.translatable(
@@ -81,18 +105,36 @@ public final class FoodTooltip {
             );
         }
         if (duration > 20) {
-            MobEffectInstance instance = new MobEffectInstance(effect, duration, amplifier);
+            MobEffectInstance instance = new MobEffectInstance(
+                    /*? if >=1.20.5 {*/
+                    effect, duration, amplifier
+                    /*?} else {*/
+                    /*effect, duration, amplifier*/
+                    /*?}*/
+            );
+            /*? if >=1.20.5 {*/
             name = Component.translatable(
                     "potion.withDuration",
                     name,
                     MobEffectUtil.formatDuration(instance, 1.0F, tickRate)
             );
+            /*?} else {*/
+            /*name = Component.translatable(
+                    "potion.withDuration",
+                    name,
+                    MobEffectUtil.formatDuration(instance, 1.0F)
+            );*/
+            /*?}*/
         }
         if (resolved.probability() < 1.0F) {
             int percent = Math.round(resolved.probability() * 100.0F);
             name = name.append(Component.translatable("well_seasoned.food_effect.chance", percent));
         }
 
+        /*? if >=1.20.5 {*/
         return name.withStyle(effect.value().getCategory().getTooltipFormatting());
+        /*?} else {*/
+        /*return name.withStyle(effect.getCategory().getTooltipFormatting());*/
+        /*?}*/
     }
 }

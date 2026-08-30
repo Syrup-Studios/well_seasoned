@@ -63,6 +63,7 @@ public final class FoodEffectResolver {
 
     private static List<ResolvedFoodEffect> itemEffects(FoodProperties food) {
         List<ResolvedFoodEffect> effects = new ArrayList<>();
+        /*? if >=1.20.5 {*/
         for (FoodProperties.PossibleEffect possible : food.effects()) {
             MobEffectInstance instance = possible.effect();
             ResourceLocation effectId = BuiltInRegistries.MOB_EFFECT.getKey(instance.getEffect().value());
@@ -80,6 +81,25 @@ public final class FoodEffectResolver {
                     possible.probability()
             ));
         }
+        /*?} else {*/
+        /*for (com.mojang.datafixers.util.Pair<MobEffectInstance, Float> possible : food.getEffects()) {
+            MobEffectInstance instance = possible.getFirst();
+            ResourceLocation effectId = BuiltInRegistries.MOB_EFFECT.getKey(instance.getEffect());
+            int maximumDuration = instance.isInfiniteDuration()
+                    ? MobEffectInstance.INFINITE_DURATION
+                    : Math.max(instance.getDuration(), DEFAULT_MAXIMUM_DURATION);
+            effects.add(new ResolvedFoodEffect(
+                    effectId,
+                    instance.getDuration(),
+                    instance.getAmplifier(),
+                    maximumDuration,
+                    instance.isAmbient(),
+                    instance.isVisible(),
+                    instance.showIcon(),
+                    possible.getSecond()
+            ));
+        }*/
+        /*?}*/
         return effects;
     }
 

@@ -22,6 +22,8 @@ with a minimum of one health point. Two health points equal one heart.
 
 | Minecraft | Mod loader | Java |
 | --- | --- | --- |
+| 1.20.1 | Fabric | 17 |
+| 1.20.1 | Forge | 17 |
 | 1.21.1 | Fabric | 21 |
 | 1.21.1 | NeoForge | 21 |
 

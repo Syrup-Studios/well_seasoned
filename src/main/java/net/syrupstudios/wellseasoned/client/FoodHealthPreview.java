@@ -2,13 +2,13 @@ package net.syrupstudios.wellseasoned.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.syrupstudios.wellseasoned.cooking.FoodHealingResolver;
+import net.syrupstudios.wellseasoned.WellSeasoned;
 
 /**
  * Ghostly heart overlay previewing how much health the held food restores.
@@ -17,17 +17,17 @@ import net.syrupstudios.wellseasoned.cooking.FoodHealingResolver;
  */
 public final class FoodHealthPreview {
     private static final ResourceLocation CONTAINER =
-            ResourceLocation.withDefaultNamespace("hud/heart/container");
+            WellSeasoned.vanillaId("hud/heart/container");
     private static final ResourceLocation CONTAINER_HARDCORE =
-            ResourceLocation.withDefaultNamespace("hud/heart/container_hardcore");
+            WellSeasoned.vanillaId("hud/heart/container_hardcore");
     private static final ResourceLocation FULL =
-            ResourceLocation.withDefaultNamespace("hud/heart/full");
+            WellSeasoned.vanillaId("hud/heart/full");
     private static final ResourceLocation FULL_HARDCORE =
-            ResourceLocation.withDefaultNamespace("hud/heart/hardcore_full");
+            WellSeasoned.vanillaId("hud/heart/hardcore_full");
     private static final ResourceLocation HALF =
-            ResourceLocation.withDefaultNamespace("hud/heart/half");
+            WellSeasoned.vanillaId("hud/heart/half");
     private static final ResourceLocation HALF_HARDCORE =
-            ResourceLocation.withDefaultNamespace("hud/heart/hardcore_half");
+            WellSeasoned.vanillaId("hud/heart/hardcore_half");
 
     private static final int HEART_SIZE = 9;
     private static final int HEART_SPACING = 8;
@@ -125,11 +125,11 @@ public final class FoodHealthPreview {
 
     private static ItemStack findHeldFood(Player player) {
         ItemStack mainHand = player.getMainHandItem();
-        if (mainHand.has(DataComponents.FOOD)) {
+        if (net.syrupstudios.wellseasoned.cooking.FoodCompat.isFood(mainHand)) {
             return mainHand;
         }
         ItemStack offHand = player.getOffhandItem();
-        if (offHand.has(DataComponents.FOOD)) {
+        if (net.syrupstudios.wellseasoned.cooking.FoodCompat.isFood(offHand)) {
             return offHand;
         }
         return null;
@@ -169,9 +169,9 @@ public final class FoodHealthPreview {
         RenderSystem.enableBlend();
         try {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, containerAlpha);
-            graphics.blitSprite(container, x, y, HEART_SIZE, HEART_SIZE);
+            ClientRenderCompat.blitHeart(graphics, container, x, y, HEART_SIZE);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, heartAlpha);
-            graphics.blitSprite(heart, x, y, HEART_SIZE, HEART_SIZE);
+            ClientRenderCompat.blitHeart(graphics, heart, x, y, HEART_SIZE);
         } finally {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.disableBlend();

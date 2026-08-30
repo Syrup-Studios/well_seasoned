@@ -1,6 +1,5 @@
 package net.syrupstudios.wellseasoned.mixin.client;
 
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
@@ -21,8 +20,12 @@ import java.util.Optional;
 public abstract class ItemStackMixin {
     @Inject(method = "getTooltipLines", at = @At("RETURN"))
     private void wellSeasoned$addFoodDetails(
+            /*? if >=1.20.5 {*/
             Item.TooltipContext context,
             Player player,
+            /*?} else {*/
+            /*Player player,*/
+            /*?}*/
             TooltipFlag flag,
             CallbackInfoReturnable<List<Component>> callback
     ) {
@@ -31,7 +34,14 @@ public abstract class ItemStackMixin {
             return;
         }
 
-        List<Component> foodLines = FoodTooltip.effectLines((ItemStack) (Object) this, context);
+        List<Component> foodLines = FoodTooltip.effectLines(
+                (ItemStack) (Object) this,
+                /*? if >=1.20.5 {*/
+                context
+                /*?} else {*/
+                /*player*/
+                /*?}*/
+        );
         if (!foodLines.isEmpty()) {
             tooltip.addAll(1, foodLines);
         }
@@ -42,7 +52,11 @@ public abstract class ItemStackMixin {
             CallbackInfoReturnable<Optional<TooltipComponent>> callback
     ) {
         ItemStack stack = (ItemStack) (Object) this;
-        if (callback.getReturnValue().isPresent() || stack.has(DataComponents.HIDE_TOOLTIP)) {
+        if (callback.getReturnValue().isPresent()
+                /*? if >=1.20.5 {*/
+                || stack.has(net.minecraft.core.component.DataComponents.HIDE_TOOLTIP)
+                /*?}*/
+        ) {
             return;
         }
 
