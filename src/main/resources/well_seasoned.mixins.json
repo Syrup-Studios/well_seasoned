@@ -6,6 +6,7 @@
   "mixins": [
     "CakeBlockMixin",
     "FoodDataMixin",
+    "LivingEntityMixin",
     "PlayerMixin"
   ],
   "client": [

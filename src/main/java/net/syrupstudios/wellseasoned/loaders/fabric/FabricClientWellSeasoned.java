@@ -13,8 +13,10 @@ public final class FabricClientWellSeasoned implements ClientModInitializer {
                 WellSeasoned.COOKING_DATA.replace(payload.snapshot())
         );
         /*?} else {*/
-        /*ClientPlayNetworking.registerGlobalReceiver(WellSeasoned.id("cooking_data"), (client, handler, buffer, responseSender) ->
-                client.execute(() -> WellSeasoned.COOKING_DATA.replace(CookingDataPayload.decode(buffer).snapshot())));*/
+        /*ClientPlayNetworking.registerGlobalReceiver(WellSeasoned.id("cooking_data"), (client, handler, buffer, responseSender) -> {
+            CookingDataPayload payload = CookingDataPayload.decode(buffer);
+            client.execute(() -> WellSeasoned.COOKING_DATA.replace(payload.snapshot()));
+        });*/
         /*?}*/
     }
 }

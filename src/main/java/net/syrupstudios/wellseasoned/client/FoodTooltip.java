@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffectUtil;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -35,15 +36,14 @@ public final class FoodTooltip {
 
     public static List<Component> effectLines(
             ItemStack stack,
+            Player player
             /*? if >=1.20.5 {*/
-            Item.TooltipContext context
-            /*?} else {*/
-            /*net.minecraft.world.entity.player.Player player*/
+            , Item.TooltipContext context
             /*?}*/
     ) {
         ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(stack.getItem());
         FoodProfile profile = WellSeasoned.COOKING_DATA.food(itemId).orElse(null);
-        FoodProperties food = net.syrupstudios.wellseasoned.cooking.FoodCompat.food(stack);
+        FoodProperties food = net.syrupstudios.wellseasoned.cooking.FoodCompat.food(stack, player);
         if (profile == null || food == null) {
             return List.of();
         }

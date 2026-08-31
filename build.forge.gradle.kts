@@ -70,8 +70,7 @@ tasks.processResources {
         "license" to project.property("mod.license"),
         "homepage" to project.property("mod.homepage"),
         "issues" to project.property("mod.issues"),
-        "sources" to project.property("mod.sources"),
-        "mixinConfig" to "${project.property("mod.id")}.mixins.json"
+        "sources" to project.property("mod.sources")
     )
     inputs.properties(props)
     filesMatching("META-INF/mods.toml") { expand(props) }

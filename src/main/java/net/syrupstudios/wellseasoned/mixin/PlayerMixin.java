@@ -1,6 +1,10 @@
 package net.syrupstudios.wellseasoned.mixin;
 
 import net.minecraft.world.entity.player.Player;
+/*? if <1.20.5 {*/
+import net.minecraft.world.food.FoodData;
+import net.minecraft.world.item.Item;
+/*?}*/
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -46,6 +50,53 @@ public abstract class PlayerMixin {
         /*FoodConsumptionService.finishEating((Player) (Object) this, stack);*/
         /*?}*/
     }
+
+    /*? if <1.20.5 && forge {*/
+    /*@Redirect(
+            method = "eat",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/food/FoodData;eat(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)V"
+            )
+    )
+    private void wellSeasoned$suppressNestedForgeFoodDataHealing(
+            FoodData foodData,
+            Item item,
+            ItemStack stack,
+            net.minecraft.world.entity.LivingEntity entity
+    ) {
+        FoodConsumptionService.beginDirectFoodDataSuppression();
+        try {
+            foodData.eat(item, stack, entity);
+        } finally {
+            FoodConsumptionService.endDirectFoodDataSuppression();
+        }
+    }
+    */
+    /*?}*/
+
+    /*? if <1.20.5 && !forge {*/
+    /*@Redirect(
+            method = "eat",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/world/food/FoodData;eat(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/ItemStack;)V"
+            )
+    )
+    private void wellSeasoned$suppressNestedFoodDataHealing(
+            FoodData foodData,
+            Item item,
+            ItemStack stack
+    ) {
+        FoodConsumptionService.beginDirectFoodDataSuppression();
+        try {
+            foodData.eat(item, stack);
+        } finally {
+            FoodConsumptionService.endDirectFoodDataSuppression();
+        }
+    }
+    */
+    /*?}*/
 
     /*? if >=1.20.5 {*/
     @ModifyVariable(method = "eat", at = @At("HEAD"), argsOnly = true)

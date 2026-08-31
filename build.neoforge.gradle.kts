@@ -75,7 +75,7 @@ tasks.processResources {
     filesMatching("*.mixins.json") {
         expand("java" to "JAVA_$targetJavaVersion")
     }
-    exclude("fabric.mod.json")
+    exclude("fabric.mod.json", "META-INF/mods.toml")
 }
 
 tasks.register<Copy>("buildAndCollect") {

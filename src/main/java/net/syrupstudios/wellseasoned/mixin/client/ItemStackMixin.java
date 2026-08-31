@@ -36,10 +36,9 @@ public abstract class ItemStackMixin {
 
         List<Component> foodLines = FoodTooltip.effectLines(
                 (ItemStack) (Object) this,
+                player
                 /*? if >=1.20.5 {*/
-                context
-                /*?} else {*/
-                /*player*/
+                , context
                 /*?}*/
         );
         if (!foodLines.isEmpty()) {

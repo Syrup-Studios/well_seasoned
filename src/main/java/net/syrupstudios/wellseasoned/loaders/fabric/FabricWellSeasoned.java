@@ -20,9 +20,6 @@ public final class FabricWellSeasoned implements ModInitializer {
         WellSeasoned.initialize();
         /*? if >=1.20.5 {*/
         PayloadTypeRegistry.playS2C().register(CookingDataPayload.TYPE, CookingDataPayload.STREAM_CODEC);
-        /*?} else {*/
-        /*ServerPlayNetworking.registerGlobalReceiver(WellSeasoned.id("cooking_data"), (server, player, handler, buffer, responseSender) ->
-                server.execute(() -> WellSeasoned.COOKING_DATA.replace(CookingDataPayload.decode(buffer).snapshot())));*/
         /*?}*/
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(
                 new CookingReloadListener(WellSeasoned.COOKING_DATA)

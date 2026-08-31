@@ -61,7 +61,7 @@ public final class FoodHealthPreview {
             return;
         }
 
-        float healing = FoodHealingResolver.resolve(stack);
+        float healing = FoodHealingResolver.resolve(stack, player);
         float currentHealth = player.getHealth();
         float maxHealth = player.getMaxHealth();
         if (!Float.isFinite(healing) || !Float.isFinite(currentHealth) || !Float.isFinite(maxHealth)) {
@@ -125,11 +125,11 @@ public final class FoodHealthPreview {
 
     private static ItemStack findHeldFood(Player player) {
         ItemStack mainHand = player.getMainHandItem();
-        if (net.syrupstudios.wellseasoned.cooking.FoodCompat.isFood(mainHand)) {
+        if (net.syrupstudios.wellseasoned.cooking.FoodCompat.isFood(mainHand, player)) {
             return mainHand;
         }
         ItemStack offHand = player.getOffhandItem();
-        if (net.syrupstudios.wellseasoned.cooking.FoodCompat.isFood(offHand)) {
+        if (net.syrupstudios.wellseasoned.cooking.FoodCompat.isFood(offHand, player)) {
             return offHand;
         }
         return null;

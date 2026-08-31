@@ -19,9 +19,13 @@ public abstract class GuiMixin {
     @Shadow private RandomSource random;
 
     /*? if >=1.20.5 {*/
-    @Inject(method = "renderFoodLevel", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "renderFood", at = @At("HEAD"), cancellable = true)
     private void wellSeasoned$hideFood(
-            GuiGraphics graphics, CallbackInfo callback
+            GuiGraphics graphics,
+            Player player,
+            int top,
+            int right,
+            CallbackInfo callback
     ) {
         callback.cancel();
     }

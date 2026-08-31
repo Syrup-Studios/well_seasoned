@@ -102,7 +102,7 @@ tasks.processResources {
     dependsOn(generateFabricMetadata)
     inputs.property("targetJavaVersion", targetJavaVersion)
     inputs.properties(fabricResourceProperties)
-    exclude("fabric.mod.json", "META-INF/neoforge.mods.toml")
+    exclude("fabric.mod.json", "META-INF/neoforge.mods.toml", "META-INF/mods.toml")
     from(generatedFabricMetadata) {
         rename { "fabric.mod.json" }
         expand(fabricResourceProperties)

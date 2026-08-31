@@ -2,6 +2,7 @@ package net.syrupstudios.wellseasoned.cooking;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.syrupstudios.wellseasoned.WellSeasoned;
@@ -19,7 +20,12 @@ public final class FoodHealingResolver {
      * the cake block item) still honor a configured profile, otherwise zero.
      */
     public static float resolve(ItemStack stack) {
-        FoodProperties food = FoodCompat.food(stack);
+        return resolve(stack, (LivingEntity) null);
+    }
+
+    /** Resolves a stack using the food properties visible to the supplied entity. */
+    public static float resolve(ItemStack stack, LivingEntity entity) {
+        FoodProperties food = FoodCompat.food(stack, entity);
         if (food == null) {
             return resolveConfigured(stack);
         }

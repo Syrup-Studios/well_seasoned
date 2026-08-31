@@ -29,3 +29,8 @@ To run a development client, use one of these commands:
 
 The 1.20.1 targets use Fabric Loader/Fabric API and Forge respectively; the
 1.21.1 targets use Fabric and NeoForge respectively.
+
+The build command validates compilation and packaging for every supported
+target. Runtime checks should use the corresponding `runClient` task; a
+dedicated server also requires accepting Minecraft's EULA in its generated
+`run/eula.txt` file.

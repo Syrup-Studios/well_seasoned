@@ -6,9 +6,9 @@ import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
-import net.minecraft.resources.ResourceLocation;
 import net.syrupstudios.wellseasoned.WellSeasoned;
 import net.syrupstudios.wellseasoned.cooking.CookingReloadListener;
 import net.syrupstudios.wellseasoned.network.CookingDataPayload;
@@ -30,9 +30,13 @@ public final class ForgeWellSeasoned {
                 CookingDataPayload.class,
                 CookingDataPayload::encode,
                 CookingDataPayload::decode,
-                (payload, context) -> context.get().enqueueWork(() ->
-                        WellSeasoned.COOKING_DATA.replace(payload.snapshot())
-                )
+                (payload, context) -> {
+                    context.get().enqueueWork(() ->
+                            WellSeasoned.COOKING_DATA.replace(payload.snapshot())
+                    );
+                    context.get().setPacketHandled(true);
+                },
+                java.util.Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
         MinecraftForge.EVENT_BUS.addListener(this::addReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(this::syncCookingData);

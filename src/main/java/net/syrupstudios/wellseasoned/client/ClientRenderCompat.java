@@ -18,7 +18,8 @@ final class ClientRenderCompat {
         /*?} else {*/
         String path = sprite.getPath();
         int u = path.contains("container") ? 16 : path.endsWith("half") ? 61 : 52;
-        graphics.blit(GUI_ICONS, x, y, (float) u, 0.0F, size, size, 256, 256);
+        int v = path.contains("hardcore") ? 45 : 0;
+        graphics.blit(GUI_ICONS, x, y, (float) u, (float) v, size, size, 256, 256);
         /*?}*/
     }
 }
