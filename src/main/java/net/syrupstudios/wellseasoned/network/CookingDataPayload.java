@@ -5,8 +5,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 /*?} else {*/
-import net.minecraft.network.FriendlyByteBuf;
-/*?}*/
+/*import net.minecraft.network.FriendlyByteBuf;
+*//*?}*/
 import net.minecraft.resources.ResourceLocation;
 import net.syrupstudios.wellseasoned.WellSeasoned;
 import net.syrupstudios.wellseasoned.cooking.CookingDataSnapshot;

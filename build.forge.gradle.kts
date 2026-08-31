@@ -41,6 +41,12 @@ sourceSets.main {
 dependencies {
     implementation("net.syrupstudios:syrup_library:${property("deps.syrup_library")}")
     jarJar("net.syrupstudios:syrup_library:${property("deps.syrup_library")}")
+    annotationProcessor("org.spongepowered:mixin:0.8.5:processor")
+}
+
+mixin {
+    add(sourceSets.main.get(), "$modId.refmap.json")
+    config("$modId.mixins.json")
 }
 
 java {
@@ -75,7 +81,12 @@ tasks.processResources {
     inputs.properties(props)
     filesMatching("META-INF/mods.toml") { expand(props) }
     filesMatching("pack.mcmeta") { expand(props) }
-    filesMatching("*.mixins.json") { expand("java" to "JAVA_$targetJavaVersion") }
+    filesMatching("*.mixins.json") {
+        expand(
+            "java" to "JAVA_$targetJavaVersion",
+            "refmap" to "  \"refmap\": \"$modId.refmap.json\",\n"
+        )
+    }
     exclude("fabric.mod.json", "META-INF/neoforge.mods.toml")
 }
 

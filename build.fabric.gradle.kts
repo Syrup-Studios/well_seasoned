@@ -110,7 +110,10 @@ tasks.processResources {
     filesMatching("pack.mcmeta") { expand(fabricResourceProperties) }
 
     filesMatching("*.mixins.json") {
-        expand("java" to "JAVA_$targetJavaVersion")
+        expand(
+            "java" to "JAVA_$targetJavaVersion",
+            "refmap" to ""
+        )
     }
 }
 

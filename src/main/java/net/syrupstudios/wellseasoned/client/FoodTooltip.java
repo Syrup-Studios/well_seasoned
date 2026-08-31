@@ -51,8 +51,8 @@ public final class FoodTooltip {
         /*? if >=1.20.5 {*/
         addEffects(lines, food, profile, context.tickRate());
         /*?} else {*/
-        addEffects(lines, food, profile, 1.0F);
-        /*?}*/
+        /*addEffects(lines, food, profile, 1.0F);
+        *//*?}*/
         return lines;
     }
 

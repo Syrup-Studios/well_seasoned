@@ -73,13 +73,13 @@ public final class FoodConsumptionService {
     }
 
     /*? if <1.20.5 {*/
-    public static void finishEating(Player player, ItemStack consumedStack) {
+    /*public static void finishEating(Player player, ItemStack consumedStack) {
         FoodProperties foodProperties = FoodCompat.food(consumedStack, player);
         if (foodProperties != null) {
             finishEating(player, consumedStack, foodProperties);
         }
     }
-    /*?}*/
+    *//*?}*/
 
     /**
      * Applies the cake food profile for one eaten cake slice. Vanilla cake

@@ -29,7 +29,7 @@ public abstract class GuiMixin {
     ) {
         callback.cancel();
     }
-    /*?} else {*/
+    /*?} elif !forge {*/
     /*@Shadow
     private int getVehicleMaxHearts(LivingEntity vehicle) {
         throw new AssertionError();

@@ -1,19 +1,28 @@
 package net.syrupstudios.wellseasoned.loaders.forge;
 
 //? if forge {
-/*import net.minecraftforge.common.MinecraftForge;
+/*import net.minecraftforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.OnDatapackSyncEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.syrupstudios.wellseasoned.WellSeasoned;
+import net.syrupstudios.wellseasoned.client.ClientFoodHeartTooltip;
+import net.syrupstudios.wellseasoned.client.FoodHeartTooltip;
 import net.syrupstudios.wellseasoned.cooking.CookingReloadListener;
 import net.syrupstudios.wellseasoned.network.CookingDataPayload;
 
 @Mod(WellSeasoned.MOD_ID)
+@Mod.EventBusSubscriber(value = Dist.CLIENT)
 public final class ForgeWellSeasoned {
     private static final String PROTOCOL = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
@@ -38,8 +47,23 @@ public final class ForgeWellSeasoned {
                 },
                 java.util.Optional.of(NetworkDirection.PLAY_TO_CLIENT)
         );
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::registerTooltipComponents);
         MinecraftForge.EVENT_BUS.addListener(this::addReloadListeners);
         MinecraftForge.EVENT_BUS.addListener(this::syncCookingData);
+    }
+
+    private void registerTooltipComponents(RegisterClientTooltipComponentFactoriesEvent event) {
+        event.register(
+                FoodHeartTooltip.class,
+                hearts -> new ClientFoodHeartTooltip(hearts.quarters())
+        );
+    }
+
+    @SubscribeEvent
+    public static void hideFoodOverlay(RenderGuiOverlayEvent.Pre event) {
+        if (event.getOverlay().id().equals(VanillaGuiOverlay.FOOD_LEVEL.id())) {
+            event.setCanceled(true);
+        }
     }
 
     private void addReloadListeners(AddReloadListenerEvent event) {

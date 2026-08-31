@@ -73,7 +73,10 @@ tasks.processResources {
     filesMatching("META-INF/neoforge.mods.toml") { expand(props) }
     filesMatching("pack.mcmeta") { expand(props) }
     filesMatching("*.mixins.json") {
-        expand("java" to "JAVA_$targetJavaVersion")
+        expand(
+            "java" to "JAVA_$targetJavaVersion",
+            "refmap" to ""
+        )
     }
     exclude("fabric.mod.json", "META-INF/mods.toml")
 }

@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ClientTooltipComponent.class)
 public interface ClientTooltipComponentMixin {
+    //? if !forge {
     @Inject(method = "create(Lnet/minecraft/world/inventory/tooltip/TooltipComponent;)"
             + "Lnet/minecraft/client/gui/screens/inventory/tooltip/ClientTooltipComponent;",
             at = @At("HEAD"),
@@ -23,4 +24,5 @@ public interface ClientTooltipComponentMixin {
             callback.setReturnValue(new ClientFoodHeartTooltip(hearts.quarters()));
         }
     }
+    //?}
 }

@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "net.syrupstudios.wellseasoned.mixin",
   "compatibilityLevel": "${java}",
-  "mixins": [
+${refmap}  "mixins": [
     "CakeBlockMixin",
     "FoodDataMixin",
     "LivingEntityMixin",

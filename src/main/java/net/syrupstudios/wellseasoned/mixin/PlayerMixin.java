@@ -2,9 +2,9 @@ package net.syrupstudios.wellseasoned.mixin;
 
 import net.minecraft.world.entity.player.Player;
 /*? if <1.20.5 {*/
-import net.minecraft.world.food.FoodData;
+/*import net.minecraft.world.food.FoodData;
 import net.minecraft.world.item.Item;
-/*?}*/
+*//*?}*/
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -56,7 +56,8 @@ public abstract class PlayerMixin {
             method = "eat",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraft/world/food/FoodData;eat(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)V"
+                    target = "Lnet/minecraft/world/food/FoodData;eat(Lnet/minecraft/world/item/Item;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/entity/LivingEntity;)V",
+                    remap = false
             )
     )
     private void wellSeasoned$suppressNestedForgeFoodDataHealing(
