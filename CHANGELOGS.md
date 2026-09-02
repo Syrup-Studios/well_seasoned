@@ -1,2 +1,1 @@
-- fixed minor issues
-- ported to 1.20.1
+- fixed issue where forge server wouldnt wanna start cause of client code
